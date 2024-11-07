@@ -1,0 +1,94 @@
+﻿/* Sayfanın genel stili ve arka plan geçişi */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, #4facfe, #00f2fe); /* Renk geçişli arka plan */
+}
+
+/* Merkezi konteyner */
+.center-container {
+    max-width: 400px;
+    width: 90%;
+    padding: 40px;
+    background-color: rgba(168, 168, 168, 0.85); /* Hafif şeffaf gri arka plan */
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    backdrop-filter: blur(5px); /* Arka planı hafif bulanıklaştırır */
+}
+
+/* Başlık */
+h1 {
+    color: #333;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Açıklama metni */
+.description {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Giriş formu ve input alanları */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+    .input-group label {
+        font-size: 14px;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+        .input-group input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+/* Butonlar */
+.button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s;
+    margin-top: 10px;
+}
+
+.button-login {
+    background-color: #007BFF;
+}
+
+.button-register {
+    background-color: #28a745;
+}
+
+    .button-login:hover,
+    .button-register:hover {
+        background-color: #0056b3; /* Hover durumunda aynı renk */
+        transform: scale(1.05);
+    }
