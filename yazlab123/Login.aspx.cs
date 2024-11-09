@@ -16,27 +16,38 @@ namespace yazlab123
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string query = "SELECT COUNT(*) FROM Kullanicilar WHERE KullaniciAdi = @KullaniciAdi AND Sifre = @Sifre";
+                string query = "SELECT KullaniciID FROM Kullanicilar WHERE KullaniciAdi = @KullaniciAdi AND Sifre = @Sifre";
                 SqlCommand cmd = new SqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@KullaniciAdi", kullaniciAdi);
                 cmd.Parameters.AddWithValue("@Sifre", sifre);
 
                 con.Open();
-                int count = (int)cmd.ExecuteScalar();
-                con.Close();
+                SqlDataReader reader = cmd.ExecuteReader();
 
-                if (count == 1)
+                if (reader.HasRows)
                 {
-                    // Giriş başarılı, oturumu başlat ve Etkinlikler sayfasına yönlendir
+                    reader.Read();  // İlk satırı al
+                    int kullaniciID = (int)reader["KullaniciID"];  // Kullanıcı ID'sini al
+                    Session["KullaniciID"] = kullaniciID;  // Oturuma kullanıcı ID'sini kaydet
+
+                    // Giriş başarılı, oturumu başlat ve Anasayfa'ya yönlendir
                     Session["Username"] = kullaniciAdi;  // Oturumda kullanıcı adını saklıyoruz
-                    Response.Redirect("Anasayfa.aspx");
+                    Response.Redirect("Anasayfa.aspx");  // Veya giriş sonrası yönlendirmek istediğiniz sayfa
                 }
                 else
                 {
                     // Hatalı giriş mesajı göster
                     lblMesaj.Text = "Kullanıcı adı veya şifre hatalı.";
                 }
+
+                reader.Close();  // Okuyucuyu kapat
             }
         }
+        protected void btnSifremiUnuttum_Click(object sender, EventArgs e)
+        {
+            // Şifremi Unuttum butonuna tıklanıldığında, kullanıcıyı şifre sıfırlama sayfasına yönlendir.
+            Response.Redirect("SifremiUnuttum.aspx");
+        }
+
     }
 }

@@ -28,6 +28,20 @@ namespace yazlab123
             string connString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
+
+                SqlCommand kontrolCommand = new SqlCommand("SELECT COUNT(*) FROM Kullanicilar WHERE KullaniciAdi = @KullaniciAdi OR Eposta = @Eposta", conn);
+                kontrolCommand.Parameters.AddWithValue("@KullaniciAdi", kullaniciAdi);
+                kontrolCommand.Parameters.AddWithValue("@Eposta", eposta);
+                conn.Open();
+                int mevcutKayitSayisi = (int)kontrolCommand.ExecuteScalar();
+               conn.Close();
+
+                if (mevcutKayitSayisi > 0)
+                {
+                    // Eğer kayıt varsa, hata mesajını göster
+                    lblMesaj.Text = "Bu kullanıcı adı veya e-posta zaten kayıtlı. Lütfen farklı bir kullanıcı adı veya e-posta deneyin.";
+                    return;
+                }
                 string query = "INSERT INTO Kullanicilar (KullaniciAdi, Sifre, Eposta, Ad, Soyad, DogumTarihi, Cinsiyet, TelefonNo,ilgiAlanlari, ProfilFoto) " +
                                "VALUES (@KullaniciAdi, @Sifre, @Eposta, @Ad, @Soyad, @DogumTarihi, @Cinsiyet, @TelefonNo, @ilgiAlanlari, @ProfilFoto)";
                 SqlCommand cmd = new SqlCommand(query, conn);

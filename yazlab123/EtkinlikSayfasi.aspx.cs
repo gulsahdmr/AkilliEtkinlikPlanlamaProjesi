@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace yazlab123
 {
@@ -10,62 +11,59 @@ namespace yazlab123
         {
             if (!IsPostBack)
             {
-                // Etkinlik ID'sini URL'den alıyoruz
-                string etkinlikId = Request.QueryString["id"];
-                if (etkinlikId != null)
-                {
-                    LoadEventDetails(etkinlikId);
-                }
-                else
-                {
-                    Response.Redirect("Anasayfa.aspx"); // Etkinlik ID'si yoksa anasayfaya yönlendir
-                }
+                LoadEventDetails();
             }
         }
 
-        private void LoadEventDetails(string etkinlikId)
+        private void LoadEventDetails()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                string query = "SELECT * FROM Etkinlikler WHERE EtkinlikID = @EtkinlikId"; // Etkinlik detaylarını alıyoruz
+                string query = "SELECT EtkinlikID, EtkinlikAdi, EtkinlikTarihi, EtkinlikKonumu FROM Etkinlikler ORDER BY EtkinlikTarihi DESC";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@EtkinlikId", etkinlikId);
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
 
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
-                {
-                    string eventName = reader["EtkinlikAdi"].ToString();
-                    string eventDescription = reader["EtkinlikAciklamasi"].ToString();
-                    string eventDate = reader["EtkinlikTarihi"].ToString();
-                    string eventTime = reader["EtkinlikSaati"].ToString();
-                    string eventduration = reader["EtkinlikSuresi"].ToString();
-                    string eventlocation = reader["EtkinlikKonumu"].ToString() ;
-                    string eventcategory = reader["EtkinlikKategorisi"].ToString();
-
-
-                    // Etkinlik detaylarını sayfada gösteriyoruz
-                    eventNameLabel.Text = eventName;
-                    eventDescriptionLabel.Text = eventDescription;
-                    eventDateLabel.Text = eventDate;
-                    eventTimeLabel.Text = eventTime;
-                    eventdurationlabel.Text = eventduration;
-                    eventlocationlabel.Text = eventlocation;
-                    eventcategorylabel.Text = eventcategory;
-
-
-                }
-                else
-                {
-                    // Etkinlik bulunamazsa kullanıcıyı anasayfaya yönlendirebiliriz
-                    Response.Redirect("Anasayfa.aspx");
-                }
-
-                reader.Close();
+                eventRepeater.DataSource = dt;
+                eventRepeater.DataBind();
             }
+        }
+
+        // Detayları Göster Butonu
+        protected void ShowDetailsButton_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
+        {
+            string etkinlikID = e.CommandArgument.ToString();
+            Response.Redirect("EtkinlikDetay.aspx?EtkinlikID=" + etkinlikID);
+        }
+
+        // Düzenleme Butonu
+        protected void EditButton_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
+        {
+            int etkinlikID = Convert.ToInt32(e.CommandArgument);
+            Response.Redirect("EtkinlikEkle.aspx?EtkinlikID=" + etkinlikID);
+        }
+
+        // Silme Butonu
+        protected void DeleteButton_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
+        {
+            int etkinlikID = Convert.ToInt32(e.CommandArgument);
+            string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "DELETE FROM Etkinlikler WHERE EtkinlikID = @EtkinlikID";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
+                cmd.ExecuteNonQuery();
+            }
+
+            // Etkinlik silindikten sonra listeyi güncelle
+            LoadEventDetails();
         }
     }
 }

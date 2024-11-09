@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head runat="server">
-    <title>Etkinlik Detayları</title>
+    <title>Etkinlik Listesi</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,124 +11,68 @@
             margin: 0;
             padding: 0;
         }
-
         .container {
             width: 80%;
-            margin: 0 auto;
-            padding-top: 20px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
-
-        .event-detail {
+        .event-item {
             background-color: #ffffff;
-            padding: 30px;
+            padding: 20px;
+            margin-bottom: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            max-width: 900px;
-            margin: 0 auto;
+            width: 48%;
+            box-sizing: border-box;
         }
-
-        .event-detail h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
+        .event-info {
+            font-size: 18px;
             color: #333;
+            margin-bottom: 10px;
         }
-
-        .event-detail p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        .event-detail strong {
-            color: #333;
-        }
-
-        .event-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .event-buttons button {
+        .btn {
             background-color: #007bff;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border: none;
             cursor: pointer;
             font-size: 16px;
             border-radius: 5px;
             transition: background-color 0.3s;
+            text-align: center;
         }
-
-        .event-buttons button:hover {
+        .btn:hover {
             background-color: #0056b3;
         }
-
-        .event-info {
-            font-size: 18px;
-            color: #007bff;
-            margin-bottom: 10px;
+        .btn-delete {
+            background-color: #dc3545;
         }
-
-        /* Responsive Design */
-        @media screen and (max-width: 768px) {
-            .container {
-                width: 95%;
-            }
-
-            .event-detail {
-                padding: 20px;
-            }
-
-            .event-detail h3 {
-                font-size: 22px;
-            }
-
-            .event-buttons button {
-                width: 48%;
-            }
+        .btn-edit {
+            background-color: #28a745;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Etkinlik Detayları</h1>
-        <div class="event-detail">
-            <p class="event-info">
-                   <strong>Etkinlik Adı:</strong> 
-                  <asp:Label ID="eventNameLabel" runat="server" Text="Etkinlik Adı" />
-            </p>
-               <p class="event-info">
-                  <strong>Etkinlik Açıklaması:</strong> 
-                   <asp:Label ID="eventDescriptionLabel" runat="server" Text="Etkinlik Açıklaması" />
-              </p>
-           
-            <p class="event-info">
-                <strong>Tarih:</strong> 
-                <asp:Label ID="eventDateLabel" runat="server" Text="Tarih" />
-            </p>
-            <p class="event-info">
-                <strong>Saat:</strong> 
-                <asp:Label ID="eventTimeLabel" runat="server" Text="Saat" />
-            </p>
-             <p class="event-info">
-                 <strong>Süre:</strong> 
-                 <asp:Label ID="eventdurationlabel" runat="server" Text="Süre" />
-             </p>
-            <p class="event-info">
-                <strong>Konum:</strong> 
-                <asp:Label ID="eventlocationlabel" runat="server" Text="Konum" />
-            </p>
-            <p class="event-info">
-                 <strong>Kategori:</strong> 
-                 <asp:Label ID="eventcategorylabel" runat="server" Text="Kategori" />
-            </p>
-            <div class="event-buttons">
-                <button>Etkinliğe Katıl</button>
-                <button>Etkinliği Paylaş</button>
-            </div>
+    <form id="form1" runat="server">
+        <div class="container">
+            <h1>Etkinlik Listesi</h1>
+            <asp:Repeater ID="eventRepeater" runat="server">
+                <ItemTemplate>
+                    <div class="event-item">
+                        <p class="event-info"><strong>Etkinlik Adı:</strong> <%# Eval("EtkinlikAdi") %></p>
+                        <p class="event-info"><strong>Tarih:</strong> <%# Eval("EtkinlikTarihi", "{0:dd MMMM yyyy}") %></p>
+                        <p class="event-info"><strong>Konum:</strong> <%# Eval("EtkinlikKonumu") %></p>
+                        
+                        <!-- Düzenle ve Sil Butonları -->
+                        <asp:Button ID="ShowDetailsButton" runat="server" Text="Etkinlik Detayını Göster" CssClass="btn" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="ShowDetailsButton_Command" />
+                        <asp:Button ID="EditButton" runat="server" Text="Düzenle" CssClass="btn btn-edit" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="EditButton_Command" />
+                        <asp:Button ID="DeleteButton" runat="server" Text="Sil" CssClass="btn btn-delete" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="DeleteButton_Command" />
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
         </div>
-    </div>
+    </form>
 </body>
 </html>

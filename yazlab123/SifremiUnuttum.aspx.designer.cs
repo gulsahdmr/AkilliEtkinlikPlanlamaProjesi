@@ -11,7 +11,7 @@ namespace yazlab123
 {
 
 
-    public partial class Giris
+    public partial class SifremiUnuttum
     {
 
         /// <summary>
@@ -24,21 +24,39 @@ namespace yazlab123
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// btnGiris control.
+        /// txtEposta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGiris;
+        protected global::System.Web.UI.WebControls.TextBox txtEposta;
 
         /// <summary>
-        /// btnKayit control.
+        /// txtYeniSifre control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnKayit;
+        protected global::System.Web.UI.WebControls.TextBox txtYeniSifre;
+
+        /// <summary>
+        /// btnSifreYenile control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSifreYenile;
+
+        /// <summary>
+        /// lblMesaj control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMesaj;
     }
 }

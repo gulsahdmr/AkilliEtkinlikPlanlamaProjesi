@@ -68,10 +68,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Anasayfa.aspx" />
+    <Content Include="EtkinlikDetay.aspx" />
+    <Content Include="EtkinlikEkle.aspx" />
     <Content Include="EtkinlikSayfasi.aspx" />
     <Content Include="Giris.aspx" />
+    <Content Include="KullaniciProfili.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
+    <Content Include="SifremiUnuttum.aspx" />
     <Content Include="Sohbet.aspx" />
     <Content Include="Styles.css" />
     <Content Include="Web.config" />
@@ -83,6 +87,20 @@
     </Compile>
     <Compile Include="Anasayfa.aspx.designer.cs">
       <DependentUpon>Anasayfa.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EtkinlikDetay.aspx.cs">
+      <DependentUpon>EtkinlikDetay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EtkinlikDetay.aspx.designer.cs">
+      <DependentUpon>EtkinlikDetay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EtkinlikEkle.aspx.cs">
+      <DependentUpon>EtkinlikEkle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EtkinlikEkle.aspx.designer.cs">
+      <DependentUpon>EtkinlikEkle.aspx</DependentUpon>
     </Compile>
     <Compile Include="EtkinlikSayfasi.aspx.cs">
       <DependentUpon>EtkinlikSayfasi.aspx</DependentUpon>
@@ -99,6 +117,14 @@
       <DependentUpon>Giris.aspx</DependentUpon>
     </Compile>
     <Compile Include="Etkinlik.cs" />
+    <Compile Include="Kullanicilar.cs" />
+    <Compile Include="KullaniciProfili.aspx.cs">
+      <DependentUpon>KullaniciProfili.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="KullaniciProfili.aspx.designer.cs">
+      <DependentUpon>KullaniciProfili.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -113,6 +139,13 @@
     </Compile>
     <Compile Include="Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SifremiUnuttum.aspx.cs">
+      <DependentUpon>SifremiUnuttum.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SifremiUnuttum.aspx.designer.cs">
+      <DependentUpon>SifremiUnuttum.aspx</DependentUpon>
     </Compile>
     <Compile Include="Sohbet.aspx.cs">
       <DependentUpon>Sohbet.aspx</DependentUpon>

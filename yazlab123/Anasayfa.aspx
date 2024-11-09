@@ -95,13 +95,29 @@
         h1 {
             color: #333;
         }
+
+        .add-event-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .add-event-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
     <!-- Menü Barı -->
     <div class="menu">
         <a href="Anasayfa.aspx">Ana Sayfa</a>
-        <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a>
+        <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a> <!-- Etkinlik Sayfası Linki -->
         <a href="Sohbet.aspx">Sohbet</a>
         <a href="KullaniciProfili.aspx">Kullanıcı Profili</a>
         <a href="AdminProfili.aspx">Admin Profili</a>
@@ -139,6 +155,9 @@
                 <button>Etkinliğe Katıl</button>
             </div>
         </div>
+
+        <!-- Yeni Etkinlik Ekleme Butonu -->
+        <a href="EtkinlikEkle.aspx" class="add-event-button">Yeni Etkinlik Ekle</a>
     </div>
 </body>
 </html>
