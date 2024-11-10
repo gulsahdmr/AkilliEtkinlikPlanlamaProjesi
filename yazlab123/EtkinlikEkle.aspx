@@ -7,37 +7,90 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 100;
-            padding: 0;
-            background-color: #f0f0f0;
+            background-color: #f9f9fb;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
         }
+        
         .container {
-            margin: 1000px;
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
         }
+        
+        h1 {
+            color: #4a90e2;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
         .form-group {
             margin-bottom: 15px;
+            text-align: left;
         }
+        
         .form-group label {
             font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
         }
+        
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 16px;
+            background-color: #f5f5f5;
         }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
         .form-group button {
-            background-color: #007bff;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
             color: white;
-            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
             border: none;
-            cursor: pointer;
             border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+        
         .form-group button:hover {
-            background-color: #0056b3;
+            background-color: #357abd;
+        }
+        
+        .message-label {
+            display: block;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        #lblMessage {
+            color: #4caf50;
+        }
+        
+        #lblErrorMessage {
+            color: #f44336;
         }
     </style>
 </head>
@@ -76,9 +129,8 @@
             <div class="form-group">
                 <button type="submit" runat="server" onserverclick="SubmitEtkinlik">Etkinliği Ekle</button>
             </div>
-            <asp:Label ID="lblMessage" runat="server" ForeColor="Green" Visible="false"></asp:Label>
-            <asp:Label ID="lblErrorMessage" runat="server" ForeColor="Red" Visible="false"></asp:Label>
-
+            <asp:Label ID="lblMessage" runat="server" CssClass="message-label" Visible="false"></asp:Label>
+            <asp:Label ID="lblErrorMessage" runat="server" CssClass="message-label" Visible="false"></asp:Label>
         </form>
     </div>
 </body>

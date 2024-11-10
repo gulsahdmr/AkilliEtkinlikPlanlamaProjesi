@@ -47,23 +47,6 @@ namespace yazlab123
             Response.Redirect("EtkinlikEkle.aspx?EtkinlikID=" + etkinlikID);
         }
 
-        // Silme Butonu
-        protected void DeleteButton_Command(object sender, System.Web.UI.WebControls.CommandEventArgs e)
-        {
-            int etkinlikID = Convert.ToInt32(e.CommandArgument);
-            string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                string query = "DELETE FROM Etkinlikler WHERE EtkinlikID = @EtkinlikID";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
-                cmd.ExecuteNonQuery();
-            }
-
-            // Etkinlik silindikten sonra listeyi güncelle
-            LoadEventDetails();
-        }
+       
     }
 }

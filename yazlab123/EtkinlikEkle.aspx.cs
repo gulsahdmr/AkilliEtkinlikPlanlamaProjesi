@@ -7,6 +7,13 @@ namespace yazlab123
 {
     public partial class EtkinlikEkle : Page
     {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["Username"] == null)
+            {
+                Response.Redirect("Login.aspx"); // Oturum açmamış kullanıcıyı giriş sayfasına yönlendir
+            }
+        }
         // Etkinlik Ekleme işlevi
         protected void SubmitEtkinlik(object sender, EventArgs e)
         {
@@ -18,6 +25,8 @@ namespace yazlab123
             int etkinlikSuresi = int.Parse(EtkinlikSuresi.Value);
             string etkinlikKonumu = EtkinlikKonumu.Value;
             string etkinlikKategorisi = EtkinlikKategorisi.Value;
+            int kullaniciID = (int)Session["KullaniciID"]; // Kullanıcı ID'sini alıyoruz
+
 
             // Etkinlik nesnesini oluştur
             Etkinlik yeniEtkinlik = new Etkinlik
@@ -40,8 +49,8 @@ namespace yazlab123
                 try
                 {
                     conn.Open();
-                    string query = "INSERT INTO Etkinlikler (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi) " +
-                                   "VALUES (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi)";
+                    string query = "INSERT INTO Etkinlikler (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi,KullaniciID) " +
+                                   "VALUES (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi,@KullaniciID)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -52,7 +61,7 @@ namespace yazlab123
                         cmd.Parameters.AddWithValue("@EtkinlikSuresi", yeniEtkinlik.EtkinlikSuresi);
                         cmd.Parameters.AddWithValue("@EtkinlikKonumu", yeniEtkinlik.EtkinlikKonumu);
                         cmd.Parameters.AddWithValue("@EtkinlikKategorisi", yeniEtkinlik.EtkinlikKategorisi);
-
+                        cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
                         cmd.ExecuteNonQuery();
                     }
 

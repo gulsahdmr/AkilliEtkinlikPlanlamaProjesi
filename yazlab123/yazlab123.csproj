@@ -70,6 +70,7 @@
     <Content Include="Anasayfa.aspx" />
     <Content Include="EtkinlikDetay.aspx" />
     <Content Include="EtkinlikEkle.aspx" />
+    <Content Include="EtkinlikGuncelle.aspx" />
     <Content Include="EtkinlikSayfasi.aspx" />
     <Content Include="Giris.aspx" />
     <Content Include="KullaniciProfili.aspx" />
@@ -101,6 +102,13 @@
     </Compile>
     <Compile Include="EtkinlikEkle.aspx.designer.cs">
       <DependentUpon>EtkinlikEkle.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EtkinlikGuncelle.aspx.cs">
+      <DependentUpon>EtkinlikGuncelle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EtkinlikGuncelle.aspx.designer.cs">
+      <DependentUpon>EtkinlikGuncelle.aspx</DependentUpon>
     </Compile>
     <Compile Include="EtkinlikSayfasi.aspx.cs">
       <DependentUpon>EtkinlikSayfasi.aspx</DependentUpon>

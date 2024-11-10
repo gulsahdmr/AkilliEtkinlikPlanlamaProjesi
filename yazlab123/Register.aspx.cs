@@ -19,11 +19,15 @@ namespace yazlab123
             string ilgiAlanlari = txtIlgiAlanlari.Text;
             string profilFoto = "";
 
+
+
             if (fuProfilFoto.HasFile)
             {
-                profilFoto = "/uploads/" + fuProfilFoto.FileName;
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + fuProfilFoto.FileName;
+                profilFoto = "/uploads/" + uniqueFileName;
                 fuProfilFoto.SaveAs(Server.MapPath(profilFoto));
             }
+
 
             string connString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
@@ -60,7 +64,15 @@ namespace yazlab123
                 {
                     conn.Open();
                     cmd.ExecuteNonQuery();
-                    lblMesaj.Text = "Kayıt başarıyla tamamlandı.";
+                    
+
+                    // Katılım başarılı mesajı ve yönlendirme
+                    lblMesaj.Text = "Kayıt başarıyla tamamlandı. Girişe yönlendiriliyorsunuz...";
+                    lblMesaj.ForeColor = System.Drawing.Color.Green;
+
+                    // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
+                    ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Giris.aspx'; }, 2000);", true);
+                    return;
                 }
                 catch (Exception ex)
                 {

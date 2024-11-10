@@ -43,12 +43,13 @@ namespace yazlab123
                     txtTelefonNo.Text = reader["TelefonNo"].ToString();
                     txtIlgiAlanlari.Text = reader["ilgiAlanlari"].ToString();
                     txtKonum.Text = reader["Konum"].ToString();
+                  
 
-                    // Load profile picture if it exists
                     if (reader["ProfilFoto"] != DBNull.Value)
                     {
-                        imgProfilFoto.ImageUrl = "~/Uploads/" + reader["ProfilFoto"].ToString();
+                        imgProfilFoto.ImageUrl = reader["ProfilFoto"].ToString();
                     }
+
                 }
 
                 reader.Close();
@@ -99,13 +100,11 @@ namespace yazlab123
                     string filePath = "~/Uploads/" + fileName;
                     string serverPath = Server.MapPath(filePath);
 
-                    // Klasörün varlığını kontrol et ve yoksa oluştur
                     if (!System.IO.Directory.Exists(Server.MapPath("~/Uploads")))
                     {
                         System.IO.Directory.CreateDirectory(Server.MapPath("~/Uploads"));
                     }
 
-                    // Dosyayı sunucuya kaydet
                     fileUploadProfilFoto.SaveAs(serverPath);
 
                     string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
@@ -114,24 +113,21 @@ namespace yazlab123
                     {
                         string query = "UPDATE Kullanicilar SET ProfilFoto = @ProfilFoto WHERE KullaniciID = @KullaniciID";
                         SqlCommand cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@ProfilFoto", fileName);
+                        cmd.Parameters.AddWithValue("@ProfilFoto", filePath); // Tam dosya yolunu kaydediyoruz
                         cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
 
                         conn.Open();
                         cmd.ExecuteNonQuery();
 
                         lblMesaj.Text = "Profil fotoğrafı başarıyla güncellendi!";
-
                     }
 
-                    // Yeni profil fotoğrafını güncelle
-                    imgProfilFoto.ImageUrl = filePath;
+                    imgProfilFoto.ImageUrl = filePath + "?v=" + DateTime.Now.Ticks; // Önbellek yenileme için sorgu dizesi ekleyin
                 }
                 catch (Exception ex)
                 {
-                    // Kullanıcıya dostane bir hata mesajı göster ve gerekiyorsa hatayı logla
                     lblMesaj.Text = "Fotoğraf yüklenirken bir hata oluştu.";
-                    Console.WriteLine(ex.Message); // veya hatayı loglayabilirsiniz
+                    Console.WriteLine(ex.Message);
                 }
             }
             else
@@ -139,6 +135,7 @@ namespace yazlab123
                 lblMesaj.Text = "Lütfen bir profil fotoğrafı seçin.";
             }
         }
+
 
 
         private void LoadEtkinlikler(int kullaniciID)

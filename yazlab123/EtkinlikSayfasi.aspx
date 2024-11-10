@@ -67,8 +67,7 @@
                         
                         <!-- Düzenle ve Sil Butonları -->
                         <asp:Button ID="ShowDetailsButton" runat="server" Text="Etkinlik Detayını Göster" CssClass="btn" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="ShowDetailsButton_Command" />
-                        <asp:Button ID="EditButton" runat="server" Text="Düzenle" CssClass="btn btn-edit" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="EditButton_Command" />
-                        <asp:Button ID="DeleteButton" runat="server" Text="Sil" CssClass="btn btn-delete" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="DeleteButton_Command" />
+                        
                     </div>
                 </ItemTemplate>
             </asp:Repeater>

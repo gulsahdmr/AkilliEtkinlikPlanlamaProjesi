@@ -29,11 +29,15 @@
             margin: 20px;
         }
 
+        .event-section {
+            margin-top: 40px;
+        }
+
         .event-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
         .event-card {
@@ -75,6 +79,49 @@
             background-color: #0056b3;
         }
 
+        /* Katıl Butonu Rengi ve Tasarımı */
+        .event-card .join-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-card .join-button:hover {
+            background-color: #218838;
+        }
+
+        /* Güncelle ve Sil Butonları Tasarımı */
+        .event-card .event-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-card .event-button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
         .profile {
             background-color: #007bff;
             color: white;
@@ -114,50 +161,80 @@
     </style>
 </head>
 <body>
-    <!-- Menü Barı -->
-    <div class="menu">
-        <a href="Anasayfa.aspx">Ana Sayfa</a>
-        <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a> <!-- Etkinlik Sayfası Linki -->
-        <a href="Sohbet.aspx">Sohbet</a>
-        <a href="KullaniciProfili.aspx">Kullanıcı Profili</a>
-        <a href="AdminProfili.aspx">Admin Profili</a>
-        <a href="Login.aspx">Çıkış</a>
-    </div>
-
-    <!-- Ana Sayfa İçeriği -->
-    <div class="container">
-        <h1>Hoşgeldiniz, <%= Session["Username"] %>!</h1>
-
-        <!-- Kullanıcı Profili -->
-        <div class="profile">
-            <h3>Profiliniz</h3>
-            <p>Kullanıcı adınız: <%= Session["Username"] %></p>
-            <a href="KullaniciProfili.aspx">Profilinizi Görüntüleyin</a>
+    <form id="form1" runat="server">
+        <!-- Menü Barı -->
+        <div class="menu">
+            <a href="Anasayfa.aspx">Ana Sayfa</a>
+            <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a>
+            <a href="Sohbet.aspx">Sohbet</a>
+            <a href="KullaniciProfili.aspx">Kullanıcı Profili</a>
+            <a href="AdminProfili.aspx">Admin Profili</a>
+            <a href="Login.aspx">Çıkış</a>
         </div>
 
-        <!-- Etkinlik Listesi -->
-        <h3>Önerilen Etkinlikler</h3>
-        <div class="event-list">
-            <%-- Veritabanından etkinlikler çekilip burada listelenecek --%>
-            <div class="event-card">
-                <h4>Etkinlik 1</h4>
-                <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                <button>Etkinliğe Katıl</button>
-            </div>
-            <div class="event-card">
-                <h4>Etkinlik 2</h4>
-                <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                <button>Etkinliğe Katıl</button>
-            </div>
-            <div class="event-card">
-                <h4>Etkinlik 3</h4>
-                <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                <button>Etkinliğe Katıl</button>
-            </div>
-        </div>
+        <!-- Ana Sayfa İçeriği -->
+        <div class="container">
+            <h1>Hoşgeldiniz, <%= Session["Username"] %>!</h1>
 
-        <!-- Yeni Etkinlik Ekleme Butonu -->
-        <a href="EtkinlikEkle.aspx" class="add-event-button">Yeni Etkinlik Ekle</a>
-    </div>
+            <!-- Kullanıcı Profili -->
+            <div class="profile">
+                <h3>Profiliniz</h3>
+                <p>Kullanıcı adınız: <%= Session["Username"] %></p>
+                <a href="KullaniciProfili.aspx">Profilinizi Görüntüleyin</a>
+            </div>
+
+            <!-- Önerilen Etkinlikler Bölümü -->
+            <div class="event-section">
+                <h3>Önerilen Etkinlikler</h3>
+                <div class="event-list">
+                    <%-- Önerilen etkinlikler burada listelenecek --%>
+                    <div class="event-card">
+                        <h4>Etkinlik 1</h4>
+                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
+                        <button class="join-button">Etkinliğe Katıl</button>
+                    </div>
+                    <div class="event-card">
+                        <h4>Etkinlik 2</h4>
+                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
+                        <button class="join-button">Etkinliğe Katıl</button>
+                    </div>
+                    <div class="event-card">
+                        <h4>Etkinlik 3</h4>
+                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
+                        <button class="join-button">Etkinliğe Katıl</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kullanıcının Oluşturduğu Etkinlikler Bölümü -->
+            <div class="event-section">
+                <h3>Kendi Oluşturduğunuz Etkinlikler</h3>
+                <div class="event-list">
+                    <%-- Kullanıcının oluşturduğu etkinlikler burada listelenecek --%>
+                    <asp:Repeater ID="rpKullaniciEtkinlikler" runat="server">
+                        <ItemTemplate>
+                            <div class="event-card">
+                                <h4><%# Eval("EtkinlikAdi") %></h4>
+                                <p><%# Eval("EtkinlikKonumu") %> - <%# Eval("EtkinlikSaati") %></p>
+                                
+                                <!-- Güncelle ve Sil Butonları -->
+                                <asp:Button ID="btnGuncelle" runat="server" Text="Güncelle" 
+                                            PostBackUrl='<%# Eval("EtkinlikID", "EtkinlikGuncelle.aspx?EtkinlikID={0}") %>' 
+                                            CssClass="event-button" />
+                                            
+                                <asp:Button ID="btnSil" runat="server" Text="Sil" 
+                                            CommandArgument='<%# Eval("EtkinlikID") %>' 
+                                            OnCommand="btnSil_Command" 
+                                            CssClass="event-button delete-button" />
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+            </div>
+
+            <!-- Yeni Etkinlik Ekleme Butonu -->
+            <a href="EtkinlikEkle.aspx" class="add-event-button">Yeni Etkinlik Ekle</a>
+        </div>
+    </form>
 </body>
 </html>
