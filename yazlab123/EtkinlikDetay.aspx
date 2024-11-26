@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EtkinlikDetay.aspx.cs" Inherits="yazlab123.EtkinlikDetay" %>
+﻿﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="EtkinlikDetay.aspx.cs" Inherits="yazlab123.EtkinlikDetay" %>
 
 
 <!DOCTYPE html>
@@ -36,19 +36,23 @@
     <form id="form1" runat="server">
         <div class="container">
             <h1>Etkinlik Detayı</h1>
-            <div class="event-detail">
-                <p class="event-info"><strong>Etkinlik Adı:</strong> <asp:Label ID="eventNameLabel" runat="server" /></p>
-                <p class="event-info"><strong>Açıklama:</strong> <asp:Label ID="eventDescriptionLabel" runat="server" /></p>
-                <p class="event-info"><strong>Tarih:</strong> <asp:Label ID="eventDateLabel" runat="server" /></p>
-                <p class="event-info"><strong>Saat:</strong> <asp:Label ID="eventTimeLabel" runat="server" /></p>
-                <p class="event-info"><strong>Süre:</strong> <asp:Label ID="eventDurationLabel" runat="server" /></p>
-                <p class="event-info"><strong>Konum:</strong> <asp:Label ID="eventLocationLabel" runat="server" /></p>
-                <p class="event-info"><strong>Kategori:</strong> <asp:Label ID="eventCategoryLabel" runat="server" /></p>
-                <asp:Button ID="KatilButton" runat="server" Text="Etkinliğe Katıl" OnClick="KatilButton_Click" />
+         <div class="event-detail">
+    <p class="event-info"><strong>Etkinlik Adı:</strong> <asp:Label ID="eventNameLabel" runat="server" /></p>
+    <p class="event-info"><strong>Açıklama:</strong> <asp:Label ID="eventDescriptionLabel" runat="server" /></p>
+    <p class="event-info"><strong>Tarih:</strong> <asp:Label ID="eventDateLabel" runat="server" /></p>
+    <p class="event-info"><strong>Saat:</strong> <asp:Label ID="eventTimeLabel" runat="server" /></p>
+    <p class="event-info"><strong>Süre:</strong> <asp:Label ID="eventDurationLabel" runat="server" /></p>
+    <p class="event-info"><strong>Konum:</strong> <asp:Label ID="eventLocationLabel" runat="server" /></p>
+    <p class="event-info"><strong>Kategori:</strong> <asp:Label ID="eventCategoryLabel" runat="server" /></p>
 
-                <asp:Label ID="lblMesaj" runat="server" ForeColor="Red"></asp:Label>
+    <asp:Button ID="KatilButton" runat="server" Text="Etkinliğe Katıl" OnClick="KatilButton_Click" />
+   <asp:Button ID="SilButton" runat="server" Text="Etkinliği Sil" OnClick="SilButton_Click" Visible="false" />
+    <asp:Button ID="GuncelleButton" runat="server" Text="Etkinliği Güncelle" OnClick="GuncelleButton_Click" Visible="false" />
 
-            </div>
+
+    <asp:Label ID="lblMesaj" runat="server" ForeColor="Red"></asp:Label>
+</div>
+
         </div>
     </form>
 </body>

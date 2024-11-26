@@ -32,6 +32,17 @@
             text-align: center;
         }
 
+        .puan-container {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .puan-container span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
         /* Profil Fotoğrafı ve Fotoğraf Güncelleme */
         .profil-foto-container {
             display: flex;
@@ -145,6 +156,14 @@
     <form id="form1" runat="server">
         <h2>Kullanıcı Profili</h2>
 
+       <!-- Kullanıcı Puanları -->
+<div class="puan-container">
+    <h3>Puanınız</h3>
+    <asp:Label ID="lblPuanMesaji" runat="server" Text="Puanınız hesaplanıyor..." 
+               style="display: block; font-size: 20px; color: #4CAF50; font-weight: bold; margin-top: 10px;" />
+</div>
+
+
         <!-- Profil Fotoğrafı ve Fotoğraf Güncelleme -->
         <div class="profil-foto-container">
             <asp:Image ID="imgProfilFoto" runat="server" Width="150" Height="150" />
@@ -191,6 +210,8 @@
 
         <!-- Hata Mesajı -->
         <asp:Label ID="lblMesaj" runat="server" CssClass="error-message" />
+      
+
 
         <!-- Katıldıkları Etkinlikler -->
         <div class="etkinlikler-container">

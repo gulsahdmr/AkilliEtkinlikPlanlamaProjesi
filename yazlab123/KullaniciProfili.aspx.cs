@@ -18,6 +18,7 @@ namespace yazlab123
                 int kullaniciID = (int)Session["KullaniciID"];
                 LoadProfile(kullaniciID);
                 LoadEtkinlikler(kullaniciID);
+                HesaplaVeKaydetPuan(kullaniciID);
             }
         }
 
@@ -159,5 +160,61 @@ namespace yazlab123
                 gvEtkinlikler.DataBind();
             }
         }
+
+        private void HesaplaVeKaydetPuan(int kullaniciID)
+        {
+            int katilimPuan = 0, olusturmaPuan = 0, bonusPuan = 0, toplamPuan = 0;
+            bool ilkKatilimVar = false;
+            string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                // Katılım Puanı Hesapla
+                string katilimQuery = "SELECT COUNT(*) FROM Katilimcilar WHERE KullaniciID = @KullaniciID";
+                using (SqlCommand cmd = new SqlCommand(katilimQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    katilimPuan = (int)cmd.ExecuteScalar() * 10;
+                }
+
+                // Etkinlik Oluşturma Puanı Hesapla
+                string olusturmaQuery = "SELECT COUNT(*) FROM Etkinlikler WHERE KullaniciID = @KullaniciID";
+                using (SqlCommand cmd = new SqlCommand(olusturmaQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    olusturmaPuan = (int)cmd.ExecuteScalar() * 15;
+                }
+
+                // İlk Katılım Bonusunu Kontrol Et
+                string ilkKatilimQuery = "SELECT TOP 1 1 FROM Katilimcilar WHERE KullaniciID = @KullaniciID";
+                using (SqlCommand cmd = new SqlCommand(ilkKatilimQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    ilkKatilimVar = cmd.ExecuteScalar() != null;
+                }
+                bonusPuan = ilkKatilimVar ? 20 : 0;
+
+                // Toplam Puan Hesapla
+                toplamPuan = katilimPuan + olusturmaPuan + bonusPuan;
+
+                // Puanı Puanlar Tablosuna Kaydet
+                string insertPuanQuery = "INSERT INTO Puanlar (KullaniciID, Puanlar, KazanilanTarih) VALUES (@KullaniciID, @Puanlar, @KazanilanTarih)";
+                using (SqlCommand cmd = new SqlCommand(insertPuanQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    cmd.Parameters.AddWithValue("@Puanlar", toplamPuan);
+                    cmd.Parameters.AddWithValue("@KazanilanTarih", DateTime.Now);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // Kullanıcıya sonucu göster
+            lblPuanMesaji.Text = $"Toplam puanınız: {toplamPuan} (Katılım: {katilimPuan}, Oluşturma: {olusturmaPuan}, Bonus: {bonusPuan})";
+            lblPuanMesaji.ForeColor = System.Drawing.Color.Green;
+        }
+
+
     }
 }

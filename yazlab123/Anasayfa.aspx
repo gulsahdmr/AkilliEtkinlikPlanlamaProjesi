@@ -217,15 +217,7 @@
                                 <h4><%# Eval("EtkinlikAdi") %></h4>
                                 <p><%# Eval("EtkinlikKonumu") %> - <%# Eval("EtkinlikSaati") %></p>
                                 
-                                <!-- Güncelle ve Sil Butonları -->
-                                <asp:Button ID="btnGuncelle" runat="server" Text="Güncelle" 
-                                            PostBackUrl='<%# Eval("EtkinlikID", "EtkinlikGuncelle.aspx?EtkinlikID={0}") %>' 
-                                            CssClass="event-button" />
-                                            
-                                <asp:Button ID="btnSil" runat="server" Text="Sil" 
-                                            CommandArgument='<%# Eval("EtkinlikID") %>' 
-                                            OnCommand="btnSil_Command" 
-                                            CssClass="event-button delete-button" />
+                               
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
