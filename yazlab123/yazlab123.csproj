@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AdminProfili.aspx" />
     <Content Include="Anasayfa.aspx" />
     <Content Include="EtkinlikDetay.aspx" />
     <Content Include="EtkinlikEkle.aspx" />
@@ -82,6 +83,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminProfili.aspx.cs">
+      <DependentUpon>AdminProfili.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AdminProfili.aspx.designer.cs">
+      <DependentUpon>AdminProfili.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Anasayfa.aspx.cs">
       <DependentUpon>Anasayfa.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

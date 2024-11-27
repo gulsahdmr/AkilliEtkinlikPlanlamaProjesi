@@ -168,7 +168,10 @@
             <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a>
             <a href="Sohbet.aspx">Sohbet</a>
             <a href="KullaniciProfili.aspx">Kullanıcı Profili</a>
-            <a href="AdminProfili.aspx">Admin Profili</a>
+           <asp:PlaceHolder ID="phAdmin" runat="server">
+        <a href="AdminProfili.aspx">Admin Profili</a>
+    </asp:PlaceHolder>
+          
             <a href="Login.aspx">Çıkış</a>
         </div>
 

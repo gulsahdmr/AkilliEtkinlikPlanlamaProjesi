@@ -18,6 +18,14 @@ namespace yazlab123
             {
                 LoadUserEvents();
             }
+            if (Session["KullaniciID"] != null && Session["KullaniciID"].ToString() == "1")
+            {
+                phAdmin.Visible = true;
+            }
+            else
+            {
+                phAdmin.Visible = false;
+            }
         }
 
         private void LoadUserEvents()
@@ -44,11 +52,6 @@ namespace yazlab123
 
                         SqlDataReader reader = cmd.ExecuteReader();
 
-                        // Eğer kullanıcıya ait etkinlik yoksa bir mesaj göster
-                        if (!reader.HasRows)
-                        {
-                            Response.Write("Bu kullanıcıya ait etkinlik bulunmamaktadır.");
-                        }
 
                         rpKullaniciEtkinlikler.DataSource = reader;
                         rpKullaniciEtkinlikler.DataBind();

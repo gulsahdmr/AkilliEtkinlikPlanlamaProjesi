@@ -217,16 +217,17 @@ namespace yazlab123
 
         protected void KatilButton_Click(object sender, EventArgs e)
         {
-            // Etkinliğe katılma işlemi burada yapılacak
+            // Kullanıcı giriş yapmamışsa uyarı ver
             if (Session["KullaniciID"] == null)
             {
-                lblMesaj.Text = "Lütfen önce giriş yapın.";  // Oturum yoksa, kullanıcıya giriş yapması gerektiğini belirtiyoruz
+                lblMesaj.Text = "Lütfen önce giriş yapın.";
+                lblMesaj.ForeColor = System.Drawing.Color.Red;
                 return;
             }
 
-            // Kullanıcı ID'sini oturumdan al
-            int etkinlikID = Convert.ToInt32(Request.QueryString["EtkinlikID"]);  // URL'den EtkinlikID'yi al
-            int kullaniciID = (int)Session["KullaniciID"];  // Kullanıcı ID'sini oturumdan alın
+            // Kullanıcı ve etkinlik bilgilerini al
+            int etkinlikID = Convert.ToInt32(Request.QueryString["EtkinlikID"]);
+            int kullaniciID = (int)Session["KullaniciID"];
 
             string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
 
@@ -234,103 +235,94 @@ namespace yazlab123
             {
                 try
                 {
-                    conn.Open(); // Bağlantıyı açıyoruz
+                    conn.Open();
 
-                    // Katılımın zaten var olup olmadığını kontrol et
+                    // Kullanıcı daha önce etkinliğe katılmış mı kontrol et
                     string checkQuery = "SELECT COUNT(*) FROM Katilimcilar WHERE KullaniciID = @KullaniciID AND EtkinlikID = @EtkinlikID";
                     SqlCommand checkCmd = new SqlCommand(checkQuery, conn);
                     checkCmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
                     checkCmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
 
                     int existingParticipation = (int)checkCmd.ExecuteScalar();
-
-                    // Eğer kullanıcı daha önce katılmışsa, tekrar eklemeyi engelle
                     if (existingParticipation > 0)
                     {
-                        lblMesaj.Text = "Etkinliğe zaten Katıldınız!! Etkinlik sayfasına yönlendiriliyorsunuz...";
+                        lblMesaj.Text = "Bu etkinliğe zaten katıldınız! Etkinlik Sayfasına yönlendiriliyorsunuz";
                         lblMesaj.ForeColor = System.Drawing.Color.Green;
-
-                        // JavaScript kodu ile 3 saniye sonra etkinlik sayfasına yönlendirme
                         ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='EtkinlikSayfasi.aspx'; }, 3000);", true);
                         return;
                     }
 
                     // Etkinlik bilgilerini al
-                    string timeCheckQuery = @"
-                SELECT EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi
-                FROM Etkinlikler
-                WHERE EtkinlikID = @EtkinlikID";
+                    string etkinlikQuery = "SELECT EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi FROM Etkinlikler WHERE EtkinlikID = @EtkinlikID";
+                    SqlCommand etkinlikCmd = new SqlCommand(etkinlikQuery, conn);
+                    etkinlikCmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
 
-                    SqlCommand timeCheckCmd = new SqlCommand(timeCheckQuery, conn);
-                    timeCheckCmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
-
-                    SqlDataReader reader = timeCheckCmd.ExecuteReader();
+                    SqlDataReader reader = etkinlikCmd.ExecuteReader();
                     DateTime etkinlikBaslangic = DateTime.MinValue;
                     TimeSpan etkinlikSuresi = TimeSpan.Zero;
 
                     if (reader.Read())
                     {
-                        // Etkinlik başlangıç tarihi ve saati al
-                        DateTime etkinlikTarihi = Convert.ToDateTime(reader["EtkinlikTarihi"]);
+                        DateTime etkinlikTarihi = (DateTime)reader["EtkinlikTarihi"];
                         TimeSpan etkinlikSaati = (TimeSpan)reader["EtkinlikSaati"];
                         int etkinlikSuresiDakika = (int)reader["EtkinlikSuresi"];
 
-                        // Etkinlik başlangıcını DateTime olarak hesapla
                         etkinlikBaslangic = etkinlikTarihi.Add(etkinlikSaati);
-
-                        // Etkinlik süresi TimeSpan olarak dönüştürülür
                         etkinlikSuresi = TimeSpan.FromMinutes(etkinlikSuresiDakika);
                     }
                     reader.Close();
 
-                    // Etkinlik bitiş zamanını hesapla
+                    // Etkinlik bitiş saatini hesapla
                     DateTime etkinlikBitis = etkinlikBaslangic.Add(etkinlikSuresi);
 
+                    // Kullanıcının katıldığı etkinliklerin zaman çakışmasını kontrol et
                     // Kullanıcının mevcut etkinlik zamanlarıyla çakışıp çakışmadığını kontrol et
                     string overlappingCheckQuery = @"
-   SELECT COUNT(*) 
+SELECT COUNT(*) 
 FROM Etkinlikler e
 JOIN Katilimcilar k ON e.EtkinlikID = k.EtkinlikID
 WHERE k.KullaniciID = @KullaniciID
 AND (
     -- İlk koşul: Etkinlik başlangıcı ve bitiş saati
-    (CAST(e.EtkinlikTarihi AS DATETIME) + e.EtkinlikSaati >= @EtkinlikBaslangicSaati
-        AND CAST(e.EtkinlikTarihi AS DATETIME) + e.EtkinlikSaati < @EtkinlikBitisSaati)
+    (DATEADD(SECOND, DATEDIFF(SECOND, '00:00:00', e.EtkinlikSaati), CAST(e.EtkinlikTarihi AS DATETIME)) >= @EtkinlikBaslangicSaati
+        AND DATEADD(SECOND, DATEDIFF(SECOND, '00:00:00', e.EtkinlikSaati), CAST(e.EtkinlikTarihi AS DATETIME)) < @EtkinlikBitisSaati)
     OR
     -- İkinci koşul: Etkinlik süresi
-    (DATEADD(MINUTE, e.EtkinlikSuresi, CAST(e.EtkinlikTarihi AS DATETIME) + e.EtkinlikSaati) > @EtkinlikBaslangicSaati 
-        AND DATEADD(MINUTE, e.EtkinlikSuresi, CAST(e.EtkinlikTarihi AS DATETIME) + e.EtkinlikSaati) <= @EtkinlikBitisSaati)
-
-
-    )";
-
+    (DATEADD(MINUTE, e.EtkinlikSuresi, DATEADD(SECOND, DATEDIFF(SECOND, '00:00:00', e.EtkinlikSaati), CAST(e.EtkinlikTarihi AS DATETIME))) > @EtkinlikBaslangicSaati 
+        AND DATEADD(MINUTE, e.EtkinlikSuresi, DATEADD(SECOND, DATEDIFF(SECOND, '00:00:00', e.EtkinlikSaati), CAST(e.EtkinlikTarihi AS DATETIME))) <= @EtkinlikBitisSaati)
+)
+";
 
                     SqlCommand overlapCheckCmd = new SqlCommand(overlappingCheckQuery, conn);
                     overlapCheckCmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
-                    overlapCheckCmd.Parameters.AddWithValue("@EtkinlikBaslangicSaati", etkinlikBaslangic);
-                    overlapCheckCmd.Parameters.AddWithValue("@EtkinlikBitisSaati", etkinlikBitis);
+                    overlapCheckCmd.Parameters.AddWithValue("@EtkinlikBaslangicSaati", etkinlikBaslangic); // Başlangıç zamanı
+                    overlapCheckCmd.Parameters.AddWithValue("@EtkinlikBitisSaati", etkinlikBitis);       // Bitiş zamanı
 
+                    // Sorguyu çalıştır ve çakışma sayısını kontrol et
                     int overlapCount = (int)overlapCheckCmd.ExecuteScalar();
 
                     // Eğer zaman çakışması varsa, katılım yapılmasın
                     if (overlapCount > 0)
                     {
-                        lblMesaj.Text = "Bu tarihte ve saatte başka bir etkinliğe katıldığınız için bu etkinliğe katılamazsınız!";
+                        lblMesaj.Text = "Bu tarihte ve saatte başka bir etkinliğe katıldığınız için bu etkinliğe katılamazsınız! Etkinlik Sayfasına yönlendiriliyorsunuz";
                         lblMesaj.ForeColor = System.Drawing.Color.Red;
+                        ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='EtkinlikSayfasi.aspx'; }, 3000);", true);
                         return;
                     }
 
-                    // Eğer katılım yoksa, yeni katılım ekle
-                    string query = "INSERT INTO Katilimcilar (KullaniciID, EtkinlikID) VALUES (@KullaniciID, @EtkinlikID)";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
-                    cmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
 
-                    cmd.ExecuteNonQuery();
-                    lblMesaj.Text = "Etkinliğe katıldınız! Etkinlik sayfasına yönlendiriliyorsunuz..";
+                    // Katılım ekle
+                    string insertQuery = "INSERT INTO Katilimcilar (KullaniciID, EtkinlikID) VALUES (@KullaniciID, @EtkinlikID)";
+                    SqlCommand insertCmd = new SqlCommand(insertQuery, conn);
+                    insertCmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    insertCmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
+
+                    insertCmd.ExecuteNonQuery();
+
+                    lblMesaj.Text = "Etkinliğe Katıldınız ! Etkinlik Sayfasına yönlendiriliyorsunuz..";
                     lblMesaj.ForeColor = System.Drawing.Color.Green;
 
-                    // JavaScript kodu ile 3 saniye sonra etkinlik sayfasına yönlendirme
+                    // JavaScript ile 3 saniye sonra yönlendirme yapılacak
                     ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='EtkinlikSayfasi.aspx'; }, 3000);", true);
                 }
                 catch (Exception ex)
@@ -341,7 +333,7 @@ AND (
                 finally
                 {
                     if (conn.State == System.Data.ConnectionState.Open)
-                        conn.Close(); // Bağlantıyı her durumda kapatıyoruz
+                        conn.Close();
                 }
             }
         }
