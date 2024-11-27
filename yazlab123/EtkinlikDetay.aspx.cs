@@ -17,6 +17,8 @@ namespace yazlab123
                     ViewState["EtkinlikID"] = etkinlikID; // Etkinlik ID'yi ViewState'e kaydediyoruz
                     LoadEventDetails(etkinlikID);
                     CheckUserEvent(etkinlikID); // Kullanıcının kendi etkinliği olup olmadığını kontrol et
+
+
                 }
             }
         }
@@ -70,7 +72,7 @@ namespace yazlab123
         {
             if (Session["KullaniciID"] == null)
             {
-                lblMesaj.Text = "Lütfen önce giriş yapın."; // Oturum yoksa, kullanıcıya giriş yapması gerektiğini belirtiyoruz
+                lblMesaj.Text = "Lütfen önce giriş yapın."; // Oturum yoksa, kullanıcıya giriş yapması gerektiğini belirt
                 return;
             }
 
@@ -92,11 +94,26 @@ namespace yazlab123
                 {
                     int etkinlikSahibiID = Convert.ToInt32(result);
 
-                    // Etkinlik sahibi veya admin kontrolü
-                    if (etkinlikSahibiID == kullaniciID || kullaniciID == 1)
+                    // Eğer kullanıcı admin ise (KullaniciID = 1), "Onayla" butonu görünür
+                    if (kullaniciID == 1)
+                    {
+                        Onayla.Visible = true;
+                        SilButton.Visible = true; // Diğer butonları gizle
+                        GuncelleButton.Visible = true;
+                    }
+                    // Eğer kullanıcı etkinlik sahibiyse, "Sil" ve "Güncelle" butonları görünür
+                    else if (etkinlikSahibiID == kullaniciID)
                     {
                         SilButton.Visible = true;
-                      GuncelleButton.Visible = true;
+                        GuncelleButton.Visible = true;
+                        Onayla.Visible = false; // Admin butonunu gizle
+                    }
+                    else
+                    {
+                        // Diğer kullanıcılar için tüm butonları gizle
+                        SilButton.Visible = false;
+                        GuncelleButton.Visible = false;
+                        Onayla.Visible = false;
                     }
                 }
             }
@@ -339,6 +356,54 @@ AND (
         }
 
 
+
+        protected void OnaylaButton_Click(object sender, EventArgs e)
+        {
+            // URL'den EtkinlikID'yi al
+            string etkinlikID = Request.QueryString["EtkinlikID"];
+
+            if (!string.IsNullOrEmpty(etkinlikID))
+            {
+                // Veritabanı bağlantı dizesi
+                string connStr = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
+
+                // SQL sorgusunu hazırlıyoruz: Onay'ı 1 yaparak etkinlikyi onaylıyoruz
+                string query = "UPDATE Etkinlikler SET Onay = @Onay WHERE EtkinlikID = @EtkinlikID";
+
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+
+                    // Parametreleri ekliyoruz
+                    cmd.Parameters.AddWithValue("@Onay", 1); // Onay değeri 1 (true) olarak set edilir
+                    cmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID); // EtkinlikID'yi parametre olarak ekliyoruz
+
+                    try
+                    {
+                        conn.Open();
+                        cmd.ExecuteNonQuery(); // Sorguyu çalıştırıyoruz
+
+                        // İşlem başarılıysa kullanıcıya "Etkinlik Onaylandı" mesajını gösterebiliriz
+                        OnayliMesajLabel.Text = "Etkinlik Onaylandı. Etkinlik Sayfasına yönlendiriliyorsunuz";
+                        OnayliMesajLabel.ForeColor = System.Drawing.Color.Red;
+                        OnayliMesajLabel.Visible = true;
+
+
+
+
+                        // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
+                        ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='EtkinlikSayfasi.aspx'; }, 3000);", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Hata meydana gelirse hata mesajını göster
+                        ErrorMessageLabel.Text = "Hata: " + ex.Message;
+                        ErrorMessageLabel.Visible = true;
+                    }
+                }
+            }
+            
+        }
 
 
     }

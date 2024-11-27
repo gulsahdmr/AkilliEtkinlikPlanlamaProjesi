@@ -48,7 +48,7 @@ namespace yazlab123
             }
             else if (e.CommandName == "Detay")
             {
-                Response.Redirect("KullaniciProfili.aspx?KullaniciID=" + kullaniciID);
+                Response.Redirect("AdminKullaniciProfiliDetay.aspx?KullaniciID=" + kullaniciID);
             }
         }
 

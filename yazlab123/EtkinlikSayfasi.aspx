@@ -64,8 +64,15 @@
                         <p class="event-info"><strong>Etkinlik Adı:</strong> <%# Eval("EtkinlikAdi") %></p>
                         <p class="event-info"><strong>Tarih:</strong> <%# Eval("EtkinlikTarihi", "{0:dd MMMM yyyy}") %></p>
                         <p class="event-info"><strong>Konum:</strong> <%# Eval("EtkinlikKonumu") %></p>
+                         <!-- Etkinlik Onay Durumu -->
+                       <p class="event-info">
+    <strong>Durum:</strong> 
+    <%# Convert.ToInt32( Eval("Onay")) == 1 ? "Onaylı" : "Onaylı Değil" %>
+</p>
+
                         
-                        <!-- Düzenle ve Sil Butonları -->
+                        
+                        <!-- Düzenle  Butonları -->
                         <asp:Button ID="ShowDetailsButton" runat="server" Text="Etkinlik Detayını Göster" CssClass="btn" CommandArgument='<%# Eval("EtkinlikID") %>' OnCommand="ShowDetailsButton_Command" />
                         
                     </div>

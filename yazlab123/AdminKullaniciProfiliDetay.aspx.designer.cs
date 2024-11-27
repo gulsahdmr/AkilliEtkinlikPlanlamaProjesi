@@ -11,7 +11,7 @@ namespace yazlab123
 {
 
 
-    public partial class EtkinlikDetay
+    public partial class AdminKullaniciProfiliDetay
     {
 
         /// <summary>
@@ -24,130 +24,103 @@ namespace yazlab123
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// hdnEtkinlikID control.
+        /// lblPuanMesaji control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hdnEtkinlikID;
+        protected global::System.Web.UI.WebControls.Label lblPuanMesaji;
 
         /// <summary>
-        /// eventNameLabel control.
+        /// imgProfilFoto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventNameLabel;
+        protected global::System.Web.UI.WebControls.Image imgProfilFoto;
 
         /// <summary>
-        /// eventDescriptionLabel control.
+        /// fileUploadProfilFoto control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventDescriptionLabel;
+        protected global::System.Web.UI.WebControls.FileUpload fileUploadProfilFoto;
 
         /// <summary>
-        /// eventDateLabel control.
+        /// btnFotoGuncelle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventDateLabel;
+        protected global::System.Web.UI.WebControls.Button btnFotoGuncelle;
 
         /// <summary>
-        /// eventTimeLabel control.
+        /// txtAd control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventTimeLabel;
+        protected global::System.Web.UI.WebControls.TextBox txtAd;
 
         /// <summary>
-        /// eventDurationLabel control.
+        /// txtSoyad control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventDurationLabel;
+        protected global::System.Web.UI.WebControls.TextBox txtSoyad;
 
         /// <summary>
-        /// eventLocationLabel control.
+        /// txtEposta control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventLocationLabel;
+        protected global::System.Web.UI.WebControls.TextBox txtEposta;
 
         /// <summary>
-        /// eventCategoryLabel control.
+        /// txtTelefonNo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label eventCategoryLabel;
+        protected global::System.Web.UI.WebControls.TextBox txtTelefonNo;
 
         /// <summary>
-        /// KatilButton control.
+        /// txtIlgiAlanlari control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button KatilButton;
+        protected global::System.Web.UI.WebControls.TextBox txtIlgiAlanlari;
 
         /// <summary>
-        /// SilButton control.
+        /// txtKonum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SilButton;
+        protected global::System.Web.UI.WebControls.TextBox txtKonum;
 
         /// <summary>
-        /// GuncelleButton control.
+        /// btnKaydet control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button GuncelleButton;
-
-        /// <summary>
-        /// Onayla control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button Onayla;
-
-        /// <summary>
-        /// OnayliMesajLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label OnayliMesajLabel;
-
-        /// <summary>
-        /// ErrorMessageLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ErrorMessageLabel;
+        protected global::System.Web.UI.WebControls.Button btnKaydet;
 
         /// <summary>
         /// lblMesaj control.
@@ -157,5 +130,14 @@ namespace yazlab123
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMesaj;
+
+        /// <summary>
+        /// gvEtkinlikler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvEtkinlikler;
     }
 }

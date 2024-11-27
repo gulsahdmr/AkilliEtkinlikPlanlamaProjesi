@@ -37,6 +37,7 @@
         <div class="container">
             <h1>Etkinlik Detayı</h1>
          <div class="event-detail">
+                <asp:HiddenField ID="hdnEtkinlikID" runat="server" />
     <p class="event-info"><strong>Etkinlik Adı:</strong> <asp:Label ID="eventNameLabel" runat="server" /></p>
     <p class="event-info"><strong>Açıklama:</strong> <asp:Label ID="eventDescriptionLabel" runat="server" /></p>
     <p class="event-info"><strong>Tarih:</strong> <asp:Label ID="eventDateLabel" runat="server" /></p>
@@ -45,10 +46,14 @@
     <p class="event-info"><strong>Konum:</strong> <asp:Label ID="eventLocationLabel" runat="server" /></p>
     <p class="event-info"><strong>Kategori:</strong> <asp:Label ID="eventCategoryLabel" runat="server" /></p>
 
+
+
     <asp:Button ID="KatilButton" runat="server" Text="Etkinliğe Katıl" OnClick="KatilButton_Click" />
    <asp:Button ID="SilButton" runat="server" Text="Etkinliği Sil" OnClick="SilButton_Click" Visible="false" />
     <asp:Button ID="GuncelleButton" runat="server" Text="Etkinliği Güncelle" OnClick="GuncelleButton_Click" Visible="false" />
-
+              <asp:Button ID="Onayla" runat="server" Text="Etkinliği Onayla" OnClick="OnaylaButton_Click" Visible="false" />
+             <asp:Label ID="OnayliMesajLabel" runat="server" ForeColor="Green" Visible="False" />
+<asp:Label ID="ErrorMessageLabel" runat="server" ForeColor="Red" Visible="False" />
 
     <asp:Label ID="lblMesaj" runat="server" ForeColor="Red"></asp:Label>
 </div>
