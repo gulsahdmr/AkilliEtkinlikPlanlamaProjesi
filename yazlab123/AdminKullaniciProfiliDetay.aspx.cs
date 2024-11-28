@@ -67,39 +67,59 @@ namespace yazlab123
 
         protected void btnKaydet_Click(object sender, EventArgs e)
         {
-            int kullaniciID = (int)Session["KullaniciID"];
-            string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            if (Request.QueryString["KullaniciID"] != null)
             {
-                string query = "UPDATE Kullanicilar SET Ad = @Ad, Soyad = @Soyad, Eposta = @Eposta, " +
-                               "TelefonNo = @TelefonNo, ilgiAlanlari = @ilgiAlanlari, Konum = @Konum " +
-                               "WHERE KullaniciID = @KullaniciID";
+                int kullaniciID;
+                if (int.TryParse(Request.QueryString["KullaniciID"], out kullaniciID))
+                {
+                    string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
 
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Ad", txtAd.Text);
-                cmd.Parameters.AddWithValue("@Soyad", txtSoyad.Text);
-                cmd.Parameters.AddWithValue("@Eposta", txtEposta.Text);
-                cmd.Parameters.AddWithValue("@TelefonNo", txtTelefonNo.Text);
-                cmd.Parameters.AddWithValue("@ilgiAlanlari", txtIlgiAlanlari.Text);
-                cmd.Parameters.AddWithValue("@Konum", txtKonum.Text);
-                cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        string query = "UPDATE Kullanicilar SET Ad = @Ad, Soyad = @Soyad, Eposta = @Eposta, " +
+                                       "TelefonNo = @TelefonNo, ilgiAlanlari = @ilgiAlanlari, Konum = @Konum " +
+                                       "WHERE KullaniciID = @KullaniciID";
 
-                conn.Open();
-                cmd.ExecuteNonQuery();
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@Ad", txtAd.Text);
+                        cmd.Parameters.AddWithValue("@Soyad", txtSoyad.Text);
+                        cmd.Parameters.AddWithValue("@Eposta", txtEposta.Text);
+                        cmd.Parameters.AddWithValue("@TelefonNo", txtTelefonNo.Text);
+                        cmd.Parameters.AddWithValue("@ilgiAlanlari", txtIlgiAlanlari.Text);
+                        cmd.Parameters.AddWithValue("@Konum", txtKonum.Text);
+                        cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
 
-                lblMesaj.Text = "Bilgiler başarıyla güncellendi!! Anasayfaya yönlendiriliyorsunuz...";
-                lblMesaj.ForeColor = System.Drawing.Color.Green;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
 
-                // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
-                ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Anasayfa.aspx'; }, 3000);", true);
+                        lblMesaj.Text = "Bilgiler başarıyla güncellendi! Anasayfaya yönlendiriliyorsunuz...";
+                        lblMesaj.ForeColor = System.Drawing.Color.Green;
+
+                        // JavaScript ile yönlendirme
+                        ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Anasayfa.aspx'; }, 3000);", true);
+                    }
+                }
+                else
+                {
+                    lblMesaj.Text = "Geçersiz Kullanıcı ID!";
+                    lblMesaj.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+            else
+            {
+                lblMesaj.Text = "Kullanıcı ID eksik!";
+                lblMesaj.ForeColor = System.Drawing.Color.Red;
             }
         }
 
-        protected void btnFotoGuncelle_Click(object sender, EventArgs e)
-        {
-            int kullaniciID = (int)Session["KullaniciID"];
 
+        protected void btnFotoGuncelle_Click(object sender, EventArgs e)
+{
+    if (Request.QueryString["KullaniciID"] != null)
+    {
+        int kullaniciID;
+        if (int.TryParse(Request.QueryString["KullaniciID"], out kullaniciID))
+        {
             if (fileUploadProfilFoto.HasFile)
             {
                 try
@@ -121,7 +141,7 @@ namespace yazlab123
                     {
                         string query = "UPDATE Kullanicilar SET ProfilFoto = @ProfilFoto WHERE KullaniciID = @KullaniciID";
                         SqlCommand cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@ProfilFoto", filePath); // Tam dosya yolunu kaydediyoruz
+                        cmd.Parameters.AddWithValue("@ProfilFoto", filePath);
                         cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
 
                         conn.Open();
@@ -130,7 +150,7 @@ namespace yazlab123
                         lblMesaj.Text = "Profil fotoğrafı başarıyla güncellendi!";
                     }
 
-                    imgProfilFoto.ImageUrl = filePath + "?v=" + DateTime.Now.Ticks; // Önbellek yenileme için sorgu dizesi ekleyin
+                    imgProfilFoto.ImageUrl = filePath + "?v=" + DateTime.Now.Ticks;
                 }
                 catch (Exception ex)
                 {
@@ -143,6 +163,19 @@ namespace yazlab123
                 lblMesaj.Text = "Lütfen bir profil fotoğrafı seçin.";
             }
         }
+        else
+        {
+            lblMesaj.Text = "Geçersiz Kullanıcı ID!";
+            lblMesaj.ForeColor = System.Drawing.Color.Red;
+        }
+    }
+    else
+    {
+        lblMesaj.Text = "Kullanıcı ID eksik!";
+        lblMesaj.ForeColor = System.Drawing.Color.Red;
+    }
+}
+
 
 
 

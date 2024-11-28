@@ -174,29 +174,37 @@
             <div class="event-list-panel">
                 <h2>Katıldığım Etkinlikler</h2>
                 <div class="event-list">
-                   <asp:Repeater ID="rpEtkinlikler" runat="server">
+                  <asp:Repeater ID="rpEtkinlikler" runat="server" OnItemCommand="rpEtkinlikler_ItemCommand">
     <ItemTemplate>
-        <button type="button" onclick="selectEvent(<%# Eval("EtkinlikID") %>)">
-            <%# Eval("EtkinlikAdi") %>
-        </button>
+        <asp:Button 
+            ID="btnEtkinlikSec" 
+            runat="server" 
+            Text='<%# Eval("EtkinlikAdi") %>' 
+            CommandName="Select" 
+            CommandArgument='<%# Eval("EtkinlikID") %>' 
+            CssClass="event-button" />
     </ItemTemplate>
+
 </asp:Repeater>
 
                 </div>
             </div>
 
-            <!-- Sağ panel: Sohbet alanı -->
-            <div class="chat-panel">
-                <h2>Sohbet</h2>
+        <!-- Sağ panel: Sohbet alanı -->
+<div class="chat-panel">
+    <h2>Sohbet</h2>
+
+    <!-- Anasayfa'ya dön butonu -->
+    <div style="text-align: right; margin-bottom: 10px;">
+        <asp:Button ID="btnAnasayfa" runat="server" Text="Anasayfa" OnClick="btnAnasayfa_Click" CssClass="back-button" />
+    </div>
 
                 <!-- Etkinlik bilgisi alanı -->
-                <!-- Etkinlik bilgisi alanı -->
-<div class="event-info">
-    <h3><asp:Label ID="lblEtkinlikAdi" runat="server" /></h3>
-    <p><strong>Konum:</strong> <asp:Label ID="lblEtkinlikKonumu" runat="server" /></p>
-    <p><strong>Tarih ve Saat:</strong> <asp:Label ID="lblEtkinlikSaati" runat="server" /></p>
-</div>
-
+                <div class="event-info">
+                    <h3><asp:Label ID="lblEtkinlikAdi" runat="server" /></h3>
+                    <p><strong>Konum:</strong> <asp:Label ID="lblEtkinlikKonumu" runat="server" /></p>
+                    <p><strong>Tarih ve Saat:</strong> <asp:Label ID="lblEtkinlikSaati" runat="server" /></p>
+                </div>
 
                 <!-- Sohbet alanı -->
                 <div class="chat-container" id="chatContainer">
@@ -216,26 +224,21 @@
                     <asp:TextBox ID="txtMesaj" runat="server" placeholder="Mesajınızı yazın..." Width="100%" />
                     <asp:Button ID="btnGonder" runat="server" Text="Gönder" OnClick="btnGonder_Click" />
                 </div>
-            <script>
-                // JavaScript fonksiyonu, Detay Görüntüle butonuna basıldığında çağrılır
-                function updateChat(eventDetails) {
-                    const chatMessages = document.querySelector('.chat-messages');
-                    chatMessages.innerHTML = `
-            <div class="chat-message">
-                <span class="username">Etkinlik Detayı</span>
-                <p>${eventDetails}</p>
-            </div>
-        `;
-                }
-</script>
-
-
-
             </div>
         </div>
     </form>
 
- 
-      
+    <script>
+        // JavaScript fonksiyonu, Detay Görüntüle butonuna basıldığında çağrılır
+        function updateChat(eventDetails) {
+            const chatMessages = document.querySelector('.chat-messages');
+            chatMessages.innerHTML = `
+                <div class="chat-message">
+                    <span class="username">Etkinlik Detayı</span>
+                    <p>${eventDetails}</p>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
