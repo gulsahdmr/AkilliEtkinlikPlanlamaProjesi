@@ -52,5 +52,10 @@ namespace yazlab123
             int etkinlikID = Convert.ToInt32(e.CommandArgument);
             Response.Redirect("EtkinlikEkle.aspx?EtkinlikID=" + etkinlikID);
         }
+        protected void btnAnasayfa_Click(object sender, EventArgs e)
+        {
+            // Kullanıcıyı Anasayfa.aspx sayfasına yönlendir
+            Response.Redirect("Anasayfa.aspx");
+        }
     }
 }

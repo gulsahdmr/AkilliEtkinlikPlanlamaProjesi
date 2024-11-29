@@ -33,6 +33,15 @@ namespace yazlab123
         protected global::System.Web.UI.WebControls.PlaceHolder phAdmin;
 
         /// <summary>
+        /// rptEtkinlikler control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptEtkinlikler;
+
+        /// <summary>
         /// rpKullaniciEtkinlikler control.
         /// </summary>
         /// <remarks>

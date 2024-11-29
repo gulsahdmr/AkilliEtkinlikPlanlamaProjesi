@@ -156,13 +156,12 @@
     <form id="form1" runat="server">
         <h2>Kullanıcı Profili</h2>
 
-       <!-- Kullanıcı Puanları -->
-<div class="puan-container">
-    <h3>Puanınız</h3>
-    <asp:Label ID="lblPuanMesaji" runat="server" Text="Puanınız hesaplanıyor..." 
-               style="display: block; font-size: 20px; color: #4CAF50; font-weight: bold; margin-top: 10px;" />
-</div>
-
+        <!-- Kullanıcı Puanları -->
+        <div class="puan-container">
+            <h3>Puanınız</h3>
+            <asp:Label ID="lblPuanMesaji" runat="server" Text="Puanınız hesaplanıyor..." 
+                       style="display: block; font-size: 20px; color: #4CAF50; font-weight: bold; margin-top: 10px;" />
+        </div>
 
         <!-- Profil Fotoğrafı ve Fotoğraf Güncelleme -->
         <div class="profil-foto-container">
@@ -194,8 +193,17 @@
             </div>
 
             <div>
-                <label for="txtIlgiAlanlari">İlgi Alanları:</label>
-                <asp:TextBox ID="txtIlgiAlanlari" runat="server" CssClass="profil-input" />
+                <label for="chkIlgiAlanlari">İlgi Alanları:</label><br />
+              <asp:CheckBoxList ID="chkIlgiAlanlari" runat="server">
+    <asp:ListItem Text="Teknoloji" Value="Teknoloji" />
+    <asp:ListItem Text="Sağlık" Value="Saglik" />
+    <asp:ListItem Text="Spor" Value="Spor" />
+    <asp:ListItem Text="Sanat" Value="Sanat" />
+    <asp:ListItem Text="Edebiyat" Value="Edebiyat" />
+</asp:CheckBoxList>
+
+
+                <!-- Diğer ilgi alanları buraya eklenebilir -->
             </div>
 
             <div>
@@ -210,8 +218,6 @@
 
         <!-- Hata Mesajı -->
         <asp:Label ID="lblMesaj" runat="server" CssClass="error-message" />
-      
-
 
         <!-- Katıldıkları Etkinlikler -->
         <div class="etkinlikler-container">
@@ -221,6 +227,7 @@
                     <asp:BoundField DataField="EtkinlikAdi" HeaderText="Etkinlik Adı" SortExpression="EtkinlikAdi" />
                     <asp:BoundField DataField="EtkinlikTarihi" HeaderText="Etkinlik Tarihi" SortExpression="EtkinlikTarihi" />
                     <asp:BoundField DataField="EtkinlikSaati" HeaderText="Etkinlik Saati" SortExpression="EtkinlikSaati" />
+
                 </Columns>
             </asp:GridView>
         </div>

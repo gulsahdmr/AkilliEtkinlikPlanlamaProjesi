@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9fb;
+            background-color: #f4f7fa;
             color: #333;
             display: flex;
             justify-content: center;
@@ -19,63 +19,74 @@
         .container {
             max-width: 600px;
             width: 100%;
-            padding: 20px;
-            margin: 50px auto;
+            padding: 30px;
             background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
             text-align: center;
+            border: 1px solid #ddd;
         }
         
         h1 {
-            color: #4a90e2;
-            font-size: 24px;
+            color: #4CAF50;
+            font-size: 28px;
             margin-bottom: 20px;
+            font-weight: 600;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
         
         .form-group label {
             font-weight: bold;
             color: #555;
-            display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
         
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 16px;
             background-color: #f5f5f5;
+            box-sizing: border-box;
         }
         
         .form-group textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
         }
         
         .form-group button {
             width: 100%;
-            padding: 12px;
-            background-color: #4a90e2;
+            padding: 14px;
+            background-color: #28a745; /* Yeşil buton rengi */
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         
         .form-group button:hover {
-            background-color: #357abd;
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        
+        .form-group button:active {
+            background-color: #1e7e34;
+            transform: scale(1);
         }
         
         .message-label {
@@ -124,7 +135,13 @@
             </div>
             <div class="form-group">
                 <label for="EtkinlikKategorisi">Etkinlik Kategorisi</label>
-                <input type="text" id="EtkinlikKategorisi" name="EtkinlikKategorisi" runat="server" />
+                <asp:DropDownList ID="ddlIlgiAlanlari" runat="server">
+                    <asp:ListItem Text="Teknoloji" Value="Teknoloji" />
+                    <asp:ListItem Text="Sağlık" Value="Saglik" />
+                    <asp:ListItem Text="Spor" Value="Spor" />
+                    <asp:ListItem Text="Sanat" Value="Sanat" />
+                    <asp:ListItem Text="Edebiyat" Value="Edebiyat" />
+                </asp:DropDownList>
             </div>
             <div class="form-group">
                 <button type="submit" runat="server" onserverclick="SubmitEtkinlik">Etkinliği Ekle</button>

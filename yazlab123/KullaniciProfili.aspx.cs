@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace yazlab123
 {
@@ -42,20 +44,32 @@ namespace yazlab123
                     txtSoyad.Text = reader["Soyad"].ToString();
                     txtEposta.Text = reader["Eposta"].ToString();
                     txtTelefonNo.Text = reader["TelefonNo"].ToString();
-                    txtIlgiAlanlari.Text = reader["ilgiAlanlari"].ToString();
+
+                    // Eğer veritabanındaki ilgi alanları virgülle ayrılmışsa
+                    string ilgiAlanlari = reader["ilgiAlanlari"].ToString();
+                    string[] selectedItems = ilgiAlanlari.Split(',');
+
+                    foreach (var item in selectedItems)
+                    {
+                        ListItem listItem = chkIlgiAlanlari.Items.FindByValue(item);
+                        if (listItem != null)
+                        {
+                            listItem.Selected = true;
+                        }
+                    }
+
                     txtKonum.Text = reader["Konum"].ToString();
-                  
 
                     if (reader["ProfilFoto"] != DBNull.Value)
                     {
                         imgProfilFoto.ImageUrl = reader["ProfilFoto"].ToString();
                     }
-
                 }
 
                 reader.Close();
             }
         }
+
 
 
         protected void btnKaydet_Click(object sender, EventArgs e)
@@ -74,20 +88,30 @@ namespace yazlab123
                 cmd.Parameters.AddWithValue("@Soyad", txtSoyad.Text);
                 cmd.Parameters.AddWithValue("@Eposta", txtEposta.Text);
                 cmd.Parameters.AddWithValue("@TelefonNo", txtTelefonNo.Text);
-                cmd.Parameters.AddWithValue("@ilgiAlanlari", txtIlgiAlanlari.Text);
+
+                // CheckBoxList'teki seçilen öğeleri al
+                string selectedIlgiAlanlari = string.Join(",", chkIlgiAlanlari.Items.Cast<ListItem>()
+                                                                .Where(item => item.Selected)
+                                                                .Select(item => item.Value));
+
+                cmd.Parameters.AddWithValue("@ilgiAlanlari", selectedIlgiAlanlari);
                 cmd.Parameters.AddWithValue("@Konum", txtKonum.Text);
                 cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
-               
+
                 lblMesaj.Text = "Bilgiler başarıyla güncellendi!! Anasayfaya yönlendiriliyorsunuz...";
                 lblMesaj.ForeColor = System.Drawing.Color.Green;
+
+                // Kullanıcı bilgileri güncellenince etkinlikleri de yeniden yükleyelim
+                LoadEtkinlikler(kullaniciID);
 
                 // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
                 ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Anasayfa.aspx'; }, 3000);", true);
             }
         }
+
 
         protected void btnFotoGuncelle_Click(object sender, EventArgs e)
         {

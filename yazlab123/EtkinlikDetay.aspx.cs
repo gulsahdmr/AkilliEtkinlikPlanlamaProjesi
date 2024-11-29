@@ -176,7 +176,15 @@ namespace yazlab123
                         {
                             conn.Open();
 
-                            // 1. Katılımcıları sil
+                            // 1. Mesajları sil
+                            string deleteMessagesQuery = "DELETE FROM Mesajlar WHERE EtkinlikID = @EtkinlikID";
+                            using (SqlCommand deleteMessagesCmd = new SqlCommand(deleteMessagesQuery, conn))
+                            {
+                                deleteMessagesCmd.Parameters.AddWithValue("@EtkinlikID", etkinlikID);
+                                deleteMessagesCmd.ExecuteNonQuery();
+                            }
+
+                            // 2. Katılımcıları sil
                             string deleteParticipantsQuery = "DELETE FROM Katilimcilar WHERE EtkinlikID = @EtkinlikID";
                             using (SqlCommand deleteParticipantsCmd = new SqlCommand(deleteParticipantsQuery, conn))
                             {
@@ -184,7 +192,7 @@ namespace yazlab123
                                 deleteParticipantsCmd.ExecuteNonQuery();
                             }
 
-                            // 2. Etkinliği sil
+                            // 3. Etkinliği sil
                             string deleteEventQuery = "DELETE FROM Etkinlikler WHERE EtkinlikID = @EtkinlikID";
                             using (SqlCommand deleteEventCmd = new SqlCommand(deleteEventQuery, conn))
                             {
@@ -192,7 +200,7 @@ namespace yazlab123
                                 deleteEventCmd.ExecuteNonQuery();
                             }
 
-                            lblMesaj.Text = "Etkinlik Başarıyla Silindi!! Anasayfaya  yönlendiriliyorsunuz...";
+                            lblMesaj.Text = "Etkinlik Başarıyla Silindi!! Anasayfaya yönlendiriliyorsunuz...";
                             lblMesaj.ForeColor = System.Drawing.Color.Green;
 
                             // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
@@ -206,10 +214,9 @@ namespace yazlab123
                         }
                     }
                 }
-               
             }
-          
         }
+
 
         protected void GuncelleButton_Click(object sender, EventArgs e)
         {

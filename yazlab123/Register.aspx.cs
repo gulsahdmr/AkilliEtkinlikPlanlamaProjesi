@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Web.UI.WebControls;
+using System.Linq;
 
 namespace yazlab123
 {
@@ -16,10 +18,14 @@ namespace yazlab123
             DateTime dogumTarihi = DateTime.Parse(txtDogumTarihi.Text);
             string cinsiyet = ddlCinsiyet.SelectedValue;
             string telefon = txtTelefon.Text;
-            string ilgiAlanlari = txtIlgiAlanlari.Text;
+
+            // CheckBoxList'ten seçilen ilgi alanlarını alıyoruz
+            string ilgiAlanlari = string.Join(",", chkIlgiAlanlari.Items.Cast<ListItem>()
+                                                 .Where(i => i.Selected)
+                                                 .Select(i => i.Value)
+                                                 .ToArray());
+
             string profilFoto = "";
-
-
 
             if (fuProfilFoto.HasFile)
             {
@@ -28,25 +34,25 @@ namespace yazlab123
                 fuProfilFoto.SaveAs(Server.MapPath(profilFoto));
             }
 
-
             string connString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connString))
             {
-
+                // Kullanıcı adı ve e-posta kontrolü
                 SqlCommand kontrolCommand = new SqlCommand("SELECT COUNT(*) FROM Kullanicilar WHERE KullaniciAdi = @KullaniciAdi OR Eposta = @Eposta", conn);
                 kontrolCommand.Parameters.AddWithValue("@KullaniciAdi", kullaniciAdi);
                 kontrolCommand.Parameters.AddWithValue("@Eposta", eposta);
                 conn.Open();
                 int mevcutKayitSayisi = (int)kontrolCommand.ExecuteScalar();
-               conn.Close();
+                conn.Close();
 
                 if (mevcutKayitSayisi > 0)
                 {
-                    // Eğer kayıt varsa, hata mesajını göster
                     lblMesaj.Text = "Bu kullanıcı adı veya e-posta zaten kayıtlı. Lütfen farklı bir kullanıcı adı veya e-posta deneyin.";
                     return;
                 }
-                string query = "INSERT INTO Kullanicilar (KullaniciAdi, Sifre, Eposta, Ad, Soyad, DogumTarihi, Cinsiyet, TelefonNo,ilgiAlanlari, ProfilFoto) " +
+
+                // Kullanıcı bilgilerini veritabanına ekleme
+                string query = "INSERT INTO Kullanicilar (KullaniciAdi, Sifre, Eposta, Ad, Soyad, DogumTarihi, Cinsiyet, TelefonNo, ilgiAlanlari, ProfilFoto) " +
                                "VALUES (@KullaniciAdi, @Sifre, @Eposta, @Ad, @Soyad, @DogumTarihi, @Cinsiyet, @TelefonNo, @ilgiAlanlari, @ProfilFoto)";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@KullaniciAdi", kullaniciAdi);
@@ -57,16 +63,14 @@ namespace yazlab123
                 cmd.Parameters.AddWithValue("@DogumTarihi", dogumTarihi);
                 cmd.Parameters.AddWithValue("@Cinsiyet", cinsiyet);
                 cmd.Parameters.AddWithValue("@TelefonNo", telefon);
-                cmd.Parameters.AddWithValue("@ilgiAlanlari", ilgiAlanlari);
+                cmd.Parameters.AddWithValue("@ilgiAlanlari", ilgiAlanlari); // Seçilen ilgi alanlarını kaydediyoruz
                 cmd.Parameters.AddWithValue("@ProfilFoto", profilFoto);
 
                 try
                 {
                     conn.Open();
                     cmd.ExecuteNonQuery();
-                    
 
-                    // Katılım başarılı mesajı ve yönlendirme
                     lblMesaj.Text = "Kayıt başarıyla tamamlandı. Girişe yönlendiriliyorsunuz...";
                     lblMesaj.ForeColor = System.Drawing.Color.Green;
 
@@ -80,5 +84,7 @@ namespace yazlab123
                 }
             }
         }
+
+
     }
 }

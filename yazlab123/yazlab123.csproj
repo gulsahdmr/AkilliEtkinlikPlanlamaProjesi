@@ -75,6 +75,7 @@
     <Content Include="EtkinlikGuncelle.aspx" />
     <Content Include="EtkinlikSayfasi.aspx" />
     <Content Include="Giris.aspx" />
+    <Content Include="Harita.aspx" />
     <Content Include="KullaniciProfili.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Register.aspx" />
@@ -141,6 +142,13 @@
       <DependentUpon>Giris.aspx</DependentUpon>
     </Compile>
     <Compile Include="Etkinlik.cs" />
+    <Compile Include="Harita.aspx.cs">
+      <DependentUpon>Harita.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Harita.aspx.designer.cs">
+      <DependentUpon>Harita.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Kullanicilar.cs" />
     <Compile Include="KullaniciProfili.aspx.cs">
       <DependentUpon>KullaniciProfili.aspx</DependentUpon>

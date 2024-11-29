@@ -83,45 +83,30 @@
         .event-card .join-button {
             background-color: #28a745;
             color: white;
-            padding: 10px;
+            padding: 12px 20px; /* Butonun iç paddingini artırarak daha geniş yapıyoruz */
             border: none;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 5px;
+            border-radius: 30px; /* Yuvarlatılmış köşeler */
             text-align: center;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
+            font-size: 16px; /* Font boyutunu biraz artırıyoruz */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Hover efektine geçiş ekliyoruz */
+            display: inline-block; /* Butonu satır içi eleman olarak yapıyoruz */
+            text-decoration: none; /* Alt çizgiyi kaldırıyoruz */
+            width: auto; /* Butonun genişliği içeriğine bağlı olarak ayarlanacak */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
         }
 
         .event-card .join-button:hover {
-            background-color: #218838;
+            background-color: #218838; /* Hover efektiyle renk değişimi */
+            transform: scale(1.05); /* Hoverda butonu biraz büyütüyoruz */
         }
 
-        /* Güncelle ve Sil Butonları Tasarımı */
-        .event-card .event-button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
+        /* Tıklandığında buton için bir efekt eklemek de faydalı olabilir */
+        .event-card .join-button:active {
+            transform: scale(1); /* Tıklanıldığında büyüme efekti iptal */
+            background-color: #1e7e34; /* Tıklanıldığında daha koyu renk */
         }
 
-        .event-card .event-button:hover {
-            background-color: #0056b3;
-        }
-
-        .delete-button {
-            background-color: #dc3545;
-        }
-
-        .delete-button:hover {
-            background-color: #c82333;
-        }
-
+        /* Kullanıcı Profili */
         .profile {
             background-color: #007bff;
             color: white;
@@ -143,21 +128,32 @@
             color: #333;
         }
 
-        .add-event-button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-            margin-top: 20px;
-        }
+       /* Yeni Etkinlik Ekle Butonu */
+.add-event-button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px; /* Butonun iç paddingini artırarak daha geniş yapıyoruz */
+    border: none;
+    border-radius: 30px; /* Yuvarlatılmış köşeler */
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px; /* Font boyutunu biraz artırıyoruz */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Hover efektine geçiş ekliyoruz */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
+}
 
-        .add-event-button:hover {
-            background-color: #218838;
-        }
+.add-event-button:hover {
+    background-color: #218838;
+    transform: scale(1.05); /* Hoverda butonu biraz büyütüyoruz */
+}
+
+.add-event-button:active {
+    transform: scale(1); /* Tıklanıldığında büyüme efekti iptal */
+    background-color: #1e7e34; /* Tıklanıldığında daha koyu renk */
+}
+
     </style>
 </head>
 <body>
@@ -168,10 +164,9 @@
             <a href="EtkinlikSayfasi.aspx">Etkinlik Sayfası</a>
             <a href="Sohbet.aspx">Sohbet</a>
             <a href="KullaniciProfili.aspx">Kullanıcı Profili</a>
-           <asp:PlaceHolder ID="phAdmin" runat="server">
-        <a href="AdminProfili.aspx">Admin Profili</a>
-    </asp:PlaceHolder>
-          
+            <asp:PlaceHolder ID="phAdmin" runat="server">
+                <a href="AdminProfili.aspx">Admin Profili</a>
+            </asp:PlaceHolder>
             <a href="Login.aspx">Çıkış</a>
         </div>
 
@@ -190,22 +185,19 @@
             <div class="event-section">
                 <h3>Önerilen Etkinlikler</h3>
                 <div class="event-list">
-                    <%-- Önerilen etkinlikler burada listelenecek --%>
-                    <div class="event-card">
-                        <h4>Etkinlik 1</h4>
-                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                        <button class="join-button">Etkinliğe Katıl</button>
-                    </div>
-                    <div class="event-card">
-                        <h4>Etkinlik 2</h4>
-                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                        <button class="join-button">Etkinliğe Katıl</button>
-                    </div>
-                    <div class="event-card">
-                        <h4>Etkinlik 3</h4>
-                        <p>Etkinlik açıklaması burada olacak. Bu etkinlik hakkında daha fazla bilgi edinin.</p>
-                        <button class="join-button">Etkinliğe Katıl</button>
-                    </div>
+                    <!-- Veritabanından gelen etkinlikleri listelemek için Repeater kullanıyoruz -->
+                    <asp:Repeater ID="rptEtkinlikler" runat="server">
+                        <ItemTemplate>
+                            <div class="event-card">
+                                <h4><%# Eval("EtkinlikAdi") %></h4>
+                              
+                               <div>
+                                    <p><%# Eval("EtkinlikKonumu") %> - <%# Eval("EtkinlikTarihi", "{0:dd MMM yyyy}") %></p>
+                                    <a href='EtkinlikDetay.aspx?EtkinlikID=<%# Eval("EtkinlikID") %>' class="join-button">Etkinlik Detay</a>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </div>
             </div>
 
@@ -213,14 +205,11 @@
             <div class="event-section">
                 <h3>Kendi Oluşturduğunuz Etkinlikler</h3>
                 <div class="event-list">
-                    <%-- Kullanıcının oluşturduğu etkinlikler burada listelenecek --%>
                     <asp:Repeater ID="rpKullaniciEtkinlikler" runat="server">
                         <ItemTemplate>
                             <div class="event-card">
                                 <h4><%# Eval("EtkinlikAdi") %></h4>
                                 <p><%# Eval("EtkinlikKonumu") %> - <%# Eval("EtkinlikSaati") %></p>
-                                
-                               
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>

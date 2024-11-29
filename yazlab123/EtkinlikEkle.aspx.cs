@@ -14,6 +14,7 @@ namespace yazlab123
                 Response.Redirect("Login.aspx"); // Oturum açmamış kullanıcıyı giriş sayfasına yönlendir
             }
         }
+
         // Etkinlik Ekleme işlevi
         protected void SubmitEtkinlik(object sender, EventArgs e)
         {
@@ -24,9 +25,9 @@ namespace yazlab123
             TimeSpan etkinlikSaati = TimeSpan.Parse(EtkinlikSaati.Value);
             int etkinlikSuresi = int.Parse(EtkinlikSuresi.Value);
             string etkinlikKonumu = EtkinlikKonumu.Value;
-            string etkinlikKategorisi = EtkinlikKategorisi.Value;
+            // ComboBox'tan seçilen ilgi alanını alıyoruz
+            string etkinlikKategorisi = ddlIlgiAlanlari.SelectedValue;
             int kullaniciID = (int)Session["KullaniciID"]; // Kullanıcı ID'sini alıyoruz
-
 
             // Etkinlik nesnesini oluştur
             Etkinlik yeniEtkinlik = new Etkinlik
@@ -49,8 +50,8 @@ namespace yazlab123
                 try
                 {
                     conn.Open();
-                    string query = "INSERT INTO Etkinlikler (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi,KullaniciID) " +
-                                   "VALUES (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi,@KullaniciID)";
+                    string query = "INSERT INTO Etkinlikler (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi, KullaniciID) " +
+                                   "VALUES (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi, @KullaniciID)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -69,7 +70,6 @@ namespace yazlab123
                     lblMessage.Text = "Etkinlik başarıyla eklendi! Anasayfaya yönlendiriliyorsunuz...";
                     lblMessage.Visible = true; // Etiket görünür yapıldı
                     lblErrorMessage.Visible = false; // Hata mesajı varsa gizlensin
-                                                  
                     lblMessage.ForeColor = System.Drawing.Color.Green;
 
                     // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme

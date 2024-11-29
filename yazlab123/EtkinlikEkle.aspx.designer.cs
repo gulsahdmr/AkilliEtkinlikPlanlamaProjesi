@@ -69,13 +69,13 @@ namespace yazlab123
         protected global::System.Web.UI.HtmlControls.HtmlInputText EtkinlikKonumu;
 
         /// <summary>
-        /// EtkinlikKategorisi control.
+        /// ddlIlgiAlanlari control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputText EtkinlikKategorisi;
+        protected global::System.Web.UI.WebControls.DropDownList ddlIlgiAlanlari;
 
         /// <summary>
         /// lblMessage control.

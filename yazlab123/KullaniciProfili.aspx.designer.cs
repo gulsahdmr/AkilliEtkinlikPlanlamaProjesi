@@ -96,13 +96,13 @@ namespace yazlab123
         protected global::System.Web.UI.WebControls.TextBox txtTelefonNo;
 
         /// <summary>
-        /// txtIlgiAlanlari control.
+        /// chkIlgiAlanlari control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtIlgiAlanlari;
+        protected global::System.Web.UI.WebControls.CheckBoxList chkIlgiAlanlari;
 
         /// <summary>
         /// txtKonum control.
