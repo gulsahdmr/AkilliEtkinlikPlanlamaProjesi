@@ -4,6 +4,35 @@
 <html>
 <head runat="server">
     <title>Etkinlik Listesi</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8cviC_WIeo3SkAa8HA-keHz5U2T4SxDI"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Harita başlangıç ayarları
+        var map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 41.0082, lng: 28.9784 }, // Başlangıç konumu (İstanbul)
+            zoom: 6 // Yakınlaştırma seviyesi
+        });
+
+        // Etkinlik işaretleyicilerini ekleme
+        etkinlikler.forEach(function (etkinlik) {
+            var marker = new google.maps.Marker({
+                position: { lat: etkinlik.Lat, lng: etkinlik.Lng },
+                map: map,
+                title: etkinlik.EtkinlikAdi
+            });
+
+            // İşaretleyiciye açılır bilgi ekleme
+            var infoWindow = new google.maps.InfoWindow({
+                content: `<h3>${etkinlik.EtkinlikAdi}</h3>`
+            });
+
+            marker.addListener("click", function () {
+                infoWindow.open(map, marker);
+            });
+        });
+    });
+    </script>
+
     <style>
         /* Genel stil */
         body {
@@ -59,6 +88,14 @@
             background-color: #0056b3;
             transform: scale(1.05);
         }
+
+        #map {
+        width: 100%;
+        height: 500px;
+        margin: 20px 0;
+    }
+
+
         .btn-delete {
             background-color: #dc3545;
         }
@@ -98,6 +135,8 @@
         <div style="text-align: center; margin-top: 20px;">
             <asp:Button ID="btnAnasayfa" runat="server" Text="Anasayfa" OnClick="btnAnasayfa_Click" CssClass="back-button" />
         </div>
+        <div id="map"></div>
+
         <h1>Etkinlik Listesi</h1>
         <div class="container">
             <asp:Repeater ID="eventRepeater" runat="server">

@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Harita ve Etkinlik Konumları</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqml8D46ngghevR-f9nLFNoKCwZ-EZyEo" async defer></script>
+    <title>Etkinlik Konumu</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8cviC_WIeo3SkAa8HA-keHz5U2T4SxDI"></script>
     <style>
         #map {
             height: 500px;
@@ -15,28 +15,29 @@
     </style>
 </head>
 <body>
-    <h2>Etkinlik Haritası</h2>
+    <h3>Etkinlik Konumu</h3>
     <div id="map"></div>
-
     <script>
-        // Harita başlatma fonksiyonu
         function initMap() {
-            // Haritanın merkezi (örneğin İstanbul)
-            const initialLocation = { lat: 41.0082, lng: 28.9784 };
+            // Etkinlik konumu (örneğin, İstanbul)
+            const etkinlikKonumu = { lat: 41.0082, lng: 28.9784 };
 
-            // Haritayı oluştur
+            // Harita oluştur
             const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 12,
-                center: initialLocation,
+                zoom: 15,
+                center: etkinlikKonumu,
             });
 
-            // Örnek bir işaretçi ekleyelim
-            new google.maps.Marker({
-                position: initialLocation,
+            // İşaretçi ekle
+            const marker = new google.maps.Marker({
+                position: etkinlikKonumu,
                 map: map,
-                title: "Etkinlik Noktası",
+                title: "Etkinlik Yeri",
             });
         }
+
+        // Haritayı yükle
+        window.onload = initMap;
     </script>
 </body>
 </html>

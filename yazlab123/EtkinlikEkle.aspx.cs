@@ -18,71 +18,91 @@ namespace yazlab123
         // Etkinlik Ekleme işlevi
         protected void SubmitEtkinlik(object sender, EventArgs e)
         {
-            // Kullanıcıdan gelen verileri al
             string etkinlikAdi = EtkinlikAdi.Value;
             string etkinlikAciklamasi = EtkinlikAciklamasi.Value;
             DateTime etkinlikTarihi = DateTime.Parse(EtkinlikTarihi.Value);
             TimeSpan etkinlikSaati = TimeSpan.Parse(EtkinlikSaati.Value);
             int etkinlikSuresi = int.Parse(EtkinlikSuresi.Value);
             string etkinlikKonumu = EtkinlikKonumu.Value;
-            // ComboBox'tan seçilen ilgi alanını alıyoruz
             string etkinlikKategorisi = ddlIlgiAlanlari.SelectedValue;
-            int kullaniciID = (int)Session["KullaniciID"]; // Kullanıcı ID'sini alıyoruz
+            int kullaniciID = (int)Session["KullaniciID"];
 
-            // Etkinlik nesnesini oluştur
-            Etkinlik yeniEtkinlik = new Etkinlik
-            {
-                EtkinlikAdi = etkinlikAdi,
-                EtkinlikAciklamasi = etkinlikAciklamasi,
-                EtkinlikTarihi = etkinlikTarihi,
-                EtkinlikSaati = etkinlikSaati,
-                EtkinlikSuresi = etkinlikSuresi,
-                EtkinlikKonumu = etkinlikKonumu,
-                EtkinlikKategorisi = etkinlikKategorisi
-            };
-
-            // Web.config dosyasındaki bağlantı dizesini al
             string connectionString = ConfigurationManager.ConnectionStrings["YazlabConnection"].ConnectionString;
 
-            // Veritabanına ekleme işlemi
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = "INSERT INTO Etkinlikler (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi, KullaniciID) " +
-                                   "VALUES (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi, @KullaniciID)";
 
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    // Çakışma kontrolü için sorgu
+                    string checkQuery = @"
+                SELECT COUNT(*) 
+                FROM Etkinlikler 
+                WHERE 
+                    KullaniciID = @KullaniciID AND
+                    EtkinlikTarihi = @EtkinlikTarihi AND
+                    (
+                        (EtkinlikSaati <= @EtkinlikSaati AND DATEADD(MINUTE, EtkinlikSuresi, EtkinlikSaati) > @EtkinlikSaati) OR
+                        (@EtkinlikSaati <= EtkinlikSaati AND DATEADD(MINUTE, @EtkinlikSuresi, @EtkinlikSaati) > EtkinlikSaati)
+                    )";
+
+                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, conn))
                     {
-                        cmd.Parameters.AddWithValue("@EtkinlikAdi", yeniEtkinlik.EtkinlikAdi);
-                        cmd.Parameters.AddWithValue("@EtkinlikAciklamasi", yeniEtkinlik.EtkinlikAciklamasi);
-                        cmd.Parameters.AddWithValue("@EtkinlikTarihi", yeniEtkinlik.EtkinlikTarihi);
-                        cmd.Parameters.AddWithValue("@EtkinlikSaati", yeniEtkinlik.EtkinlikSaati);
-                        cmd.Parameters.AddWithValue("@EtkinlikSuresi", yeniEtkinlik.EtkinlikSuresi);
-                        cmd.Parameters.AddWithValue("@EtkinlikKonumu", yeniEtkinlik.EtkinlikKonumu);
-                        cmd.Parameters.AddWithValue("@EtkinlikKategorisi", yeniEtkinlik.EtkinlikKategorisi);
-                        cmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
-                        cmd.ExecuteNonQuery();
+                        checkCmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+                        checkCmd.Parameters.AddWithValue("@EtkinlikTarihi", etkinlikTarihi);
+                        checkCmd.Parameters.AddWithValue("@EtkinlikSaati", etkinlikSaati);
+                        checkCmd.Parameters.AddWithValue("@EtkinlikSuresi", etkinlikSuresi);
+
+                        int conflictCount = (int)checkCmd.ExecuteScalar();
+                        if (conflictCount > 0)
+                        {
+                            // Çakışma durumu varsa kullanıcıya mesaj göster
+                            lblErrorMessage.Text = "Bu tarih ve saatte başka bir etkinlik mevcut. Lütfen farklı bir saat seçin.";
+                            lblErrorMessage.Visible = true;
+                            lblMessage.Visible = false;
+                            lblMessage.ForeColor = System.Drawing.Color.Green;
+                            ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Anasayfa.aspx'; }, 3000);", true);
+                            return;
+                        }
                     }
 
-                    // Etkinlik başarıyla eklendiğinde başarılı mesajı göster
-                    lblMessage.Text = "Etkinlik başarıyla eklendi! Anasayfaya yönlendiriliyorsunuz...";
-                    lblMessage.Visible = true; // Etiket görünür yapıldı
-                    lblErrorMessage.Visible = false; // Hata mesajı varsa gizlensin
-                    lblMessage.ForeColor = System.Drawing.Color.Green;
+                    // Çakışma yoksa etkinlik ekleme işlemi
+                    string insertQuery = @"
+                INSERT INTO Etkinlikler 
+                (EtkinlikAdi, EtkinlikAciklamasi, EtkinlikTarihi, EtkinlikSaati, EtkinlikSuresi, EtkinlikKonumu, EtkinlikKategorisi, KullaniciID) 
+                VALUES 
+                (@EtkinlikAdi, @EtkinlikAciklamasi, @EtkinlikTarihi, @EtkinlikSaati, @EtkinlikSuresi, @EtkinlikKonumu, @EtkinlikKategorisi, @KullaniciID)";
 
-                    // JavaScript kodu ile 3 saniye sonra anasayfaya yönlendirme
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn))
+                    {
+                        insertCmd.Parameters.AddWithValue("@EtkinlikAdi", etkinlikAdi);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikAciklamasi", etkinlikAciklamasi);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikTarihi", etkinlikTarihi);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikSaati", etkinlikSaati);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikSuresi", etkinlikSuresi);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikKonumu", etkinlikKonumu);
+                        insertCmd.Parameters.AddWithValue("@EtkinlikKategorisi", etkinlikKategorisi);
+                        insertCmd.Parameters.AddWithValue("@KullaniciID", kullaniciID);
+
+                        insertCmd.ExecuteNonQuery();
+                    }
+
+                    // Başarılı mesaj
+                    lblMessage.Text = "Etkinlik başarıyla eklendi! Anasayfaya yönlendiriliyorsunuz...";
+                    lblMessage.Visible = true;
+                    lblErrorMessage.Visible = false;
+                    lblMessage.ForeColor = System.Drawing.Color.Green;
                     ClientScript.RegisterStartupScript(this.GetType(), "Redirect", "setTimeout(function(){ window.location.href='Anasayfa.aspx'; }, 3000);", true);
                 }
                 catch (Exception ex)
                 {
-                    // Hata mesajını kullanıcıya göster
                     lblErrorMessage.Text = "Bir hata oluştu: " + ex.Message;
-                    lblErrorMessage.Visible = true; // Hata etiketini görünür yap
-                    lblMessage.Visible = false; // Başarı mesajı varsa gizlensin
+                    lblErrorMessage.Visible = true;
+                    lblMessage.Visible = false;
                 }
             }
         }
+
     }
 }
